@@ -1,7 +1,8 @@
 import { IntersectionType } from "@nestjs/swagger";
 import { Transform, Type, plainToClass } from "class-transformer"
-import { IsDefined, ValidateNested } from "class-validator"
-import { FileSystemStoredFile, HasMimeType, IsFile, IsFiles, MaxFileSize } from "nestjs-form-data";
+import { IsDefined, IsOptional, ValidateNested } from "class-validator"
+import { FileSystemStoredFile, HasMimeType, IsFile, IsFiles, MaxFileSize, MemoryStoredFile } from "nestjs-form-data";
+import { UploadFile } from "../files.decorator";
 
 class User {
   @IsDefined()
@@ -9,6 +10,17 @@ class User {
 
   @IsDefined()
   name: string
+}
+
+class Files {
+  @IsDefined()
+  file_name: string
+  @IsDefined()
+  path: string
+  @IsDefined()
+  mime_type: string
+  @IsDefined()
+  file_ext: string
 }
 
 export class Data {
@@ -19,65 +31,89 @@ export class Data {
   @IsDefined()
   chemical_name: string;
 
-  // @IsDefined()
+  @IsDefined()
   date_collection: string;
 
-  // @IsDefined()
+  @IsDefined()
   measurement_technique: string;
 
-  // @IsDefined()
+  @IsDefined()
   organization: string;
 
-  // @IsDefined()
+  @IsDefined()
   collected_by: string;
 
-  // @IsDefined()
+  @IsDefined()
   instrument: string;
 
-  // @IsDefined()
+  @IsDefined()
   type: string;
 
-  // @IsDefined()
+  @IsDefined()
   normalization: string;
 
   // @IsDefined()
+  @ValidateNested()
+  @Type(() => User)
   created_by: User;
 
   // @IsDefined()
   created_at: string
 
+  @ValidateNested()
+  @Type(() => Files)
+  // @IsDefined()
+  files: Files[]
+
+  @ValidateNested()
+  @Type(() => Files)
+  @IsOptional()
+  others_attachments: Files[]
+
 }
 
-class AdditionalExperimentDto {
-  @IsDefined()
-  id: string
-}
-
-class UpdateData extends IntersectionType(Data, AdditionalExperimentDto) {}
+// export class CreateExperimentDtoOld {
+//   @ValidateNested()
+//   @Transform(({ value }) => plainToClass(Data, JSON.parse(value)))
+//   @Type(() => Data)
+//   @IsDefined()
+//   data: Data
+// }
 
 export class CreateExperimentDto {
-  // // @IsDefined()
-  // file: any
-
-  // @Transform(({ value }) => plainToClass(Data, JSON.parse(value)))
-  // // @Type(() => Data)
-  // @ValidateNested()
-  // @IsDefined()
-  // data: Data
-  @IsFiles()
   @MaxFileSize(1 * 1024 * 1024, { each: true })
   @HasMimeType(['image/jpeg', 'image/png'], { each: true })
-  files: FileSystemStoredFile[];
-}
+  @IsFiles({ each: true })
+  @IsOptional()
+  @Transform(({ value }: { value: MemoryStoredFile[] }) => {
+    // console.log(value);
+    value.forEach((file) => {
+      if (!/[^\u0000-\u00ff]/.test(file.originalName)) {
+        file.originalName = Buffer.from(file.originalName, 'latin1').toString('utf8')
+      }
+    })
+    return value
+  })
+  files: FileSystemStoredFile;
 
-export class UpdateCreateExperimentDto {
-  // @IsDefined()
-  file: any
+  @MaxFileSize(10 * 1024 * 1024, { each: true })
+  @HasMimeType(['application/pdf'], { each: true })
+  @IsFiles({ each: true })
+  @IsOptional()
+  @Transform(({ value }: { value: MemoryStoredFile[] }) => {
+    // console.log(value);
+    value.forEach((file) => {
+      if (!/[^\u0000-\u00ff]/.test(file.originalName)) {
+        file.originalName = Buffer.from(file.originalName, 'latin1').toString('utf8')
+      }
+    })
+    return value
+  })
+  others_attachments: MemoryStoredFile;
 
-  @Transform(({ value }) => plainToClass(UpdateData, JSON.parse(value)))
-  // @Type(() => UpdateData)
   @ValidateNested()
-  @IsDefined()
-  data: UpdateData
-
+  @Transform(({ value }) => plainToClass(Data, JSON.parse(value)))
+  @Type(() => Data)
+  // @IsDefined()
+  data: Data
 }

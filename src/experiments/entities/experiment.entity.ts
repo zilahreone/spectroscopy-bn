@@ -8,6 +8,23 @@ class User {
   name: string
 }
 
+export class Files {
+  @Column()
+  file_name: string
+  
+  @Column()
+  path: string
+  
+  @Column('int')
+  size: number
+  
+  @Column()
+  mime_type: string
+  
+  @Column()
+  file_ext: string
+}
+
 @Entity()
 export class Experiment {
   @PrimaryGeneratedColumn('uuid')
@@ -25,24 +42,30 @@ export class Experiment {
   @CreateDateColumn()
   created_at: Date
 
-  // @Column()
-  // date_collection: string;
+  @Column('json', { nullable: false })
+  files: Files[]
+  
+  @Column('json', { nullable: true })
+  others_attachments: Files[]
 
-  // @Column()
-  // measurement_technique: string;
+  @Column()
+  date_collection: string;
 
-  // @Column()
-  // organization: string;
+  @Column()
+  measurement_technique: string;
 
-  // @Column()
-  // collected_by: string;
+  @Column()
+  organization: string;
 
-  // @Column()
-  // instrument: string;
+  @Column()
+  collected_by: string;
 
-  // @Column()
-  // type: string;
+  @Column()
+  instrument: string;
 
-  // @Column()
-  // normalization: string;
+  @Column()
+  type: string;
+
+  @Column()
+  normalization: string;
 }

@@ -4,26 +4,35 @@ import { ExperimentsController } from './experiments.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Experiment } from './entities/experiment.entity';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { FileSystemStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { NestjsFormDataModule } from 'nestjs-form-data';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [ExperimentsController],
+  
   providers: [
     ExperimentsService,
     // {
     //   provide: APP_GUARD,
-    //   useClass: AuthGuard,
+    //   useClass: JwtAuthGuard,
     // },
   ],
   imports: [
-    TypeOrmModule.forFeature([Experiment]),
-    NestjsFormDataModule.config({
-      storage: FileSystemStoredFile,  // MemoryStoredFile || FileSystemStoredFile
-      fileSystemStoragePath: './tmp',
-      cleanupAfterSuccessHandle: false,
-      cleanupAfterFailedHandle : true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
     }),
+    TypeOrmModule.forFeature([Experiment]),
+    NestjsFormDataModule.config({}),
+    // NestjsFormDataModule.config({
+    //   storage: FileSystemStoredFile,  // MemoryStoredFile || FileSystemStoredFile
+    //   fileSystemStoragePath: process.env.UPLOAD_DIR,
+    //   cleanupAfterSuccessHandle: false,
+    //   cleanupAfterFailedHandle : true,
+    // }),
+    AuthModule
   ],
 })
 export class ExperimentsModule {}
