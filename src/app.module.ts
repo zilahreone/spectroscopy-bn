@@ -8,6 +8,7 @@ import { Experiment } from './experiments/entities/experiment.entity';
 import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { dataSourceOptions } from 'db/data-source';
 
 @Module({
   controllers: [AppController],
@@ -17,20 +18,15 @@ import { join } from 'path';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: './spectroscopy.sqlite',
-      entities: [Experiment],
-      synchronize: process.env.NODE_ENV != 'production',
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     ExperimentsModule,
     AuthModule,
-    ServeStaticModule.forRoot({
+    // ServeStaticModule.forRoot({
       // resolve`('./uploads/test/test/')
-      rootPath: join(__dirname, '..', process.env.UPLOAD_DIR),
-      serveRoot: `/eiei`,
       // serveStaticOptions: { index: false },
-    }),
+      // rootPath: join(__dirname, '..', 'uploads'),
+      // serveRoot: 'uploads',
+    // }),
   ],
 })
 export class AppModule {}

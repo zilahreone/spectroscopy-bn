@@ -14,10 +14,10 @@ import { AuthModule } from 'src/auth/auth.module';
   
   providers: [
     ExperimentsService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
   imports: [
     ConfigModule.forRoot({

@@ -4,13 +4,25 @@ class User {
   @Column()
   id: string
   
-  @Column()
+  @Column({ nullable: true })
   name: string
+
+  @Column()
+  preferred_username: string
+
+  @Column({ nullable: true })
+  given_name: string
+
+  @Column({ nullable: true })
+  family_name: string
+
+  @Column()
+  email: string
 }
 
 export class Files {
   @Column()
-  file_name: string
+  name: string
   
   @Column()
   path: string
@@ -30,11 +42,17 @@ export class Experiment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // @Column({ nullable: true })
+  // colol: string
+
   @Column()
   experiment_name: string;
 
   @Column()
   chemical_name: string;
+  
+  @Column()
+  chemical_id: string;
 
   @Column(() => User)
   created_by: User

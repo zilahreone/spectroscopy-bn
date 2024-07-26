@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, UseInterceptors, StreamableFile, Req, RawBodyRequest } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, UseInterceptors, StreamableFile, Req, RawBodyRequest, Header } from '@nestjs/common';
 import { ExperimentsService } from './experiments.service';
 import { CreateExperimentDto } from './dto/create-experiment.dto';
 import { UpdateExperimentDto } from './dto/update-experiment.dto';
 import { UploadFiles } from 'src/upload-files.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { FormDataRequest, MemoryStoredFile, StoredFile } from 'nestjs-form-data';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 @Controller('experiments')
 export class ExperimentsController {
@@ -13,8 +15,8 @@ export class ExperimentsController {
   @Post()
   // @UploadFiles()
   @FormDataRequest()
-  create(@Body() createExperimentDto: CreateExperimentDto, @Req() req: Request) {
-    // console.log(JSON.stringify(createExperimentDto));
+  create(@Body() createExperimentDto: CreateExperimentDto) {
+    // console.log(JSON.stringify(createExperimentDto.data));
     // console.log(req.formData);
     // return createExperimentDto;
     return this.experimentsService.create(createExperimentDto);
@@ -26,6 +28,23 @@ export class ExperimentsController {
   update(@Param('id') id: string, @Body() updateExperimentDto: UpdateExperimentDto) {
     return this.experimentsService.update(id, updateExperimentDto);
   }
+
+  @Get('attachment/:id/:name')
+  getAttachment(@Param() param: any) {
+    return this.experimentsService.findAttachment(param)
+  }
+
+  @Get('file/:id/:name')
+  getFile(@Param() param: any) {
+    console.log(param);
+    return this.experimentsService.findFile(param)
+  }
+
+  @Get('all')
+  findAllWithoutId() {
+    return this.experimentsService.findAllWithoutId();
+  }
+
 
   @Get()
   // @UseGuards(AuthGuard)
