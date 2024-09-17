@@ -1,16 +1,17 @@
 import { Measurement } from "src/spectroscopy/measurement/entities/measurement.entity";
 import { User } from "src/spectroscopy/user/entities/user.entity";
-import { Column, CreateDateColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class Download {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @CreateDateColumn({ type: 'timestamptz', default: 'NOW()' })
+  @CreateDateColumn()
   timestamp: Date;
 
   @ManyToOne(() => Measurement, (measurement: Measurement) => measurement.download)
-  measurement: Measurement
+  measurement: Measurement;
 
   @ManyToOne(() => User, (user: User) => user.download)
   user: User;

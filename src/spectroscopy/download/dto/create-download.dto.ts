@@ -8,14 +8,14 @@ export class CreateDownloadDto {
   @IsNumber()
   timestamp: number;
   
-  @IsDefined()
-  @ValidateNested()
-  @Type(() => CreateMeasurementDto)
-  measurement: CreateMeasurementDto
+  // @IsDefined()
+  // @ValidateNested()
+  // @Type(() => CreateMeasurementDto)
+  // measurement: CreateMeasurementDto
 
-  @IsDefined()
-  @ValidateNested()
-  @Type(() => CreateUserDto)
-  user: CreateUserDto
+  // @IsDefined()
+  // @ValidateNested()
+  // @Type(() => CreateUserDto)
+  // user: CreateUserDto
 
 }

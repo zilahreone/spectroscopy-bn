@@ -1,6 +1,8 @@
-import { Experiment } from "src/spectroscopy/experiments/entities/experiment.entity";
-import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+// import { Experiment } from "src/spectroscopy/experiments/entities/experiment.entity";
+import { Experiment } from "src/spectroscopy/experiment/entities/experiment.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class Category {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -11,6 +13,6 @@ export class Category {
   @Column()
   description: string;
 
-  @OneToMany(() => Experiment, (experiment: Experiment) => experiment.category)
-  experiments: Experiment[];
+  // @OneToMany(() => Experiment, (experiment: Experiment) => experiment.category)
+  // experiments: Experiment[];
 }

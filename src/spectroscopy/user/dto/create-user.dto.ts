@@ -1,4 +1,4 @@
-import { IsBoolean, IsDefined, IsEmail, IsOptional } from "class-validator";
+import { IsBoolean, IsDefined, IsEmail, IsNotEmptyObject, IsObject, IsOptional } from "class-validator";
 
 export class CreateUserDto {
   @IsDefined()
@@ -24,6 +24,8 @@ export class CreateUserDto {
   @IsOptional()
   email: string;
 
+  @IsNotEmptyObject()
+  @IsObject()
   @IsDefined()
   user: object;
 }

@@ -1,12 +1,15 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { IsDefined, IsOptional } from "class-validator";
 
 export class CreateMeasurementDto {
-  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @IsDefined()
   name: string;
 
-  @Column()
+  @IsOptional()
   description: string;
+
+  @IsDefined()
+  instrument: string;
+
 }

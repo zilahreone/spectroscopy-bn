@@ -1,6 +1,8 @@
+import { Experiment } from "src/spectroscopy/experiment/entities/experiment.entity";
 import { User } from "src/spectroscopy/user/entities/user.entity";
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class Organization {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -8,6 +10,9 @@ export class Organization {
   @Column()
   description: string;
 
-  @ManyToOne(() => User, (user: User) => user.organization)
-  user: User
+  @OneToMany(() => User, (user: User) => user.organization)
+  user: User[]
+  
+  @OneToMany(() => Experiment, (experiment: Experiment) => experiment.organization)
+  experiment: Experiment[]
 }

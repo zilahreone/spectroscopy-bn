@@ -1,6 +1,7 @@
 import { Measurement } from "src/spectroscopy/measurement/entities/measurement.entity";
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class Technique {
   @PrimaryGeneratedColumn('uuid')
   id: string;

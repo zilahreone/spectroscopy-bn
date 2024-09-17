@@ -1,6 +1,7 @@
-import { Experiment } from "src/spectroscopy/experiments/entities/experiment.entity";
-import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Experiment } from "src/spectroscopy/experiment/entities/experiment.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class Sample {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -12,5 +13,5 @@ export class Sample {
   description: string;
 
   @OneToMany(() => Experiment, (experiment: Experiment) => experiment.sample)
-  experiment: Experiment
+  experiment: Experiment[];
 }

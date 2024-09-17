@@ -1,13 +1,17 @@
 import { Download } from "src/spectroscopy/download/entities/download.entity";
 import { Organization } from "src/spectroscopy/organization/entities/organization.entity";
-import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class User {
-  @Column()
+  @PrimaryColumn()
   id: string;
   
-  @Column('bool', { default: false })
+  @Column('boolean', { default: false })
   is_active: boolean;
+
+  @CreateDateColumn({ default: 'NOW()' })
+  created_date: Date
 
   @Column({ nullable: true })
   preferred_username: string;
@@ -28,5 +32,5 @@ export class User {
   download: Download[];
 
   @ManyToOne(() => Organization, (organization: Organization) => organization.user)
-  organization: Organization[];
+  organization: Organization;
 }

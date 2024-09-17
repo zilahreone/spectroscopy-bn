@@ -1,26 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, NotImplementedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User)
+    private readonly repository: Repository<User>,
+  ) {}
+  async create(createUserDto: CreateUserDto) {
+    try {
+      return await this.repository.save(createUserDto);
+    } catch (err) {
+      throw new NotImplementedException(`${err}`)
+    }
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(id: string) {
+    try {
+      return await this.repository.findBy({
+        id: id
+      });
+    } catch (err) {
+      throw new NotImplementedException(`${err}`);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    try {
+      return await this.repository.findOneBy({ id });
+    } catch (err) {
+      throw new NotImplementedException(`${err}`);
+    }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    try {
+      return await this.repository.update(id, updateUserDto);
+    } catch (err) {
+      throw new NotImplementedException(`${err}`);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    try {
+      return await this.repository.delete({ id: id })
+    } catch (err) {
+      throw new NotImplementedException(`${err}`);
+    }
   }
 }
