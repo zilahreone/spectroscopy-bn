@@ -1,4 +1,5 @@
 import { Download } from "src/spectroscopy/download/entities/download.entity";
+import { Experiment } from "src/spectroscopy/experiment/entities/experiment.entity";
 import { Organization } from "src/spectroscopy/organization/entities/organization.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
@@ -29,8 +30,12 @@ export class User {
   user: object;
 
   @OneToMany(() => Download, (download: Download) => download.user)
-  download: Download[];
-
-  @ManyToOne(() => Organization, (organization: Organization) => organization.user)
+  downloads: Download[];
+  
+  @ManyToOne(() => Organization, (organization: Organization) => organization.users)
   organization: Organization;
+  
+  @OneToMany(() => Experiment, (experiment: Experiment) => experiment.user)
+  experiments: Experiment[];
+
 }

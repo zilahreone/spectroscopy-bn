@@ -1,17 +1,22 @@
+import { Experiment } from "src/spectroscopy/experiment/entities/experiment.entity";
 import { Measurement } from "src/spectroscopy/measurement/entities/measurement.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Technique {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Measurement, (measurement: Measurement) => measurement.technique)
-  measurement: Measurement;
-
   @Column()
   name: string;
 
   @Column()
   description: string;
+
+  @ManyToOne(() => Measurement, (measurement: Measurement) => measurement.techniques)
+  measurement: Measurement;
+
+  @OneToMany(() => Experiment, (experiment: Experiment) => experiment.technique)
+  experiments: Experiment[];
+
 }

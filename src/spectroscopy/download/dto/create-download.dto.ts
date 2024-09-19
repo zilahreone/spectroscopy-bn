@@ -4,9 +4,6 @@ import { CreateMeasurementDto } from "src/spectroscopy/measurement/dto/create-me
 import { CreateUserDto } from "src/spectroscopy/user/dto/create-user.dto";
 
 export class CreateDownloadDto {
-
-  @IsNumber()
-  timestamp: number;
   
   // @IsDefined()
   // @ValidateNested()

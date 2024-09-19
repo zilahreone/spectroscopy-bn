@@ -21,6 +21,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { HttpExceptionFilter } from './all-exceptions.filter';
 import { User } from './spectroscopy/user/entities/user.entity';
 import { ExperimentModule } from './spectroscopy/experiment/experiment.module';
+import { MaterialModule } from './spectroscopy/material/material.module';
 
 @Module({
   controllers: [AppController],
@@ -51,6 +52,7 @@ import { ExperimentModule } from './spectroscopy/experiment/experiment.module';
     CategoryModule,
     SampleModule,
     ExperimentModule,
+    MaterialModule,
     // ServeStaticModule.forRoot({
     // resolve`('./uploads/test/test/')
     // serveStaticOptions: { index: false },

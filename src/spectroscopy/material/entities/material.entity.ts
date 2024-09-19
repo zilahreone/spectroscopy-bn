@@ -2,7 +2,7 @@ import { Sample } from "src/spectroscopy/sample/entities/sample.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Category {
+export class Material {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -12,6 +12,6 @@ export class Category {
   @Column()
   description: string;
 
-  @OneToMany(() => Sample, (sample: Sample) => sample.category)
+  @OneToMany(() => Sample, (sample: Sample) => sample.material)
   samples: Sample[];
 }

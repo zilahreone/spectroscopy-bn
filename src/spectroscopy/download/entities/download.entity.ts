@@ -10,10 +10,10 @@ export class Download {
   @CreateDateColumn()
   timestamp: Date;
 
-  @ManyToOne(() => Measurement, (measurement: Measurement) => measurement.download)
+  @ManyToOne(() => Measurement, (measurement: Measurement) => measurement.downloads)
   measurement: Measurement;
 
-  @ManyToOne(() => User, (user: User) => user.download)
+  @ManyToOne(() => User, (user: User) => user.downloads)
   user: User;
   
 }
