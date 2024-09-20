@@ -9,6 +9,9 @@ export class Organization {
   id: string;
 
   @Column()
+  name: string;
+  
+  @Column()
   description: string;
   
   @Column()

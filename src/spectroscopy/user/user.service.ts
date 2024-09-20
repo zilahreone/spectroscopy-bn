@@ -1,43 +1,50 @@
-import { Injectable, InternalServerErrorException, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, NotImplementedException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly repository: Repository<User>,
-  ) {}
+    private readonly authService: AuthService
+  ) { }
   async create(createUserDto: CreateUserDto) {
     try {
-      return await this.repository.save(createUserDto);
+      return await this.repository.insert(createUserDto)
     } catch (err) {
       throw new NotImplementedException(`${err}`)
     }
   }
 
-  async findAll(id: string) {
-    try {
-      return await this.repository.findBy({
-        id: id
-      });
-    } catch (err) {
-      throw new NotImplementedException(`${err}`);
+  async findAll() {
+    const jwt_decode = this.authService.getJWTDecode();
+    if (jwt_decode) {
+      try {
+        return await this.repository.findBy({
+          id: jwt_decode['sub']
+        });
+      } catch (err) {
+        throw new NotImplementedException(`${err}`);
+      }
     }
+    throw new UnauthorizedException();
   }
 
   async findOne(id: string) {
     try {
       return await this.repository.findOneBy({ id });
     } catch (err) {
-      throw new NotImplementedException(`${err}`);
+      throw new NotFoundException(`${err}`);
     }
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
+    await this.findOne(id);
     try {
       return await this.repository.update(id, updateUserDto);
     } catch (err) {
@@ -46,6 +53,7 @@ export class UserService {
   }
 
   async remove(id: string) {
+    await this.findOne(id);
     try {
       return await this.repository.delete({ id: id })
     } catch (err) {

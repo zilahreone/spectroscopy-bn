@@ -8,8 +8,8 @@ export class CreateUserDto {
   @IsOptional()
   is_active: boolean;
 
-  @IsDefined()
-  organization_id: string;
+  // @IsDefined()
+  // organization_id: string;
 
   @IsOptional()
   preferred_username: string;

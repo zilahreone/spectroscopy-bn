@@ -1,7 +1,4 @@
-import { Type } from "class-transformer";
-import { IsDefined, IsInt, IsNumber, ValidateNested } from "class-validator";
-import { CreateMeasurementDto } from "src/spectroscopy/measurement/dto/create-measurement.dto";
-import { CreateUserDto } from "src/spectroscopy/user/dto/create-user.dto";
+import { IsDefined } from "class-validator";
 
 export class CreateDownloadDto {
   
@@ -15,4 +12,9 @@ export class CreateDownloadDto {
   // @Type(() => CreateUserDto)
   // user: CreateUserDto
 
+}
+
+export class AdditionalCreateDownloadInfo {
+  @IsDefined()
+  id: string;
 }

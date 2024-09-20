@@ -1,16 +1,17 @@
-import { Type } from "class-transformer";
-import { IsDefined, ValidateNested } from "class-validator";
-import { CreateUserDto } from "src/spectroscopy/user/dto/create-user.dto";
+import { IsDefined, IsOptional } from "class-validator";
 
 export class CreateOrganizationDto {
   @IsDefined()
   name: string;
 
-  @IsDefined()
+  @IsOptional()
   description: string;
 
-  // @IsDefined()
-  // @ValidateNested()
-  // @Type(() => CreateUserDto)
-  // user: CreateUserDto;
+  @IsOptional()
+  contact: string;
+}
+
+export class AdditionalOrganizationInfo {
+  @IsDefined()
+  id: string;
 }

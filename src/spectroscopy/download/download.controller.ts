@@ -19,16 +19,16 @@ export class DownloadController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.downloadService.findOne(+id);
+    return this.downloadService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDownloadDto: UpdateDownloadDto) {
-    return this.downloadService.update(+id, updateDownloadDto);
+    return this.downloadService.update(id, updateDownloadDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.downloadService.remove(+id);
+    return this.downloadService.remove(id);
   }
 }

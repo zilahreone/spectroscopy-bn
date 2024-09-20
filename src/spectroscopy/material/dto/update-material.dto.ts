@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateMaterialDto } from './create-material.dto';
+import { IntersectionType, PartialType } from '@nestjs/swagger';
+import { AdditionalCreateMaterialInfo, CreateMaterialDto } from './create-material.dto';
 
-export class UpdateMaterialDto extends PartialType(CreateMaterialDto) {}
+export class UpdateMaterialDto extends IntersectionType(CreateMaterialDto, AdditionalCreateMaterialInfo) {}

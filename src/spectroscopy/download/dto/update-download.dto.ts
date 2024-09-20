@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateDownloadDto } from './create-download.dto';
+import { IntersectionType } from '@nestjs/swagger';
+import { AdditionalCreateDownloadInfo, CreateDownloadDto } from './create-download.dto';
 
-export class UpdateDownloadDto extends PartialType(CreateDownloadDto) {}
+export class UpdateDownloadDto extends IntersectionType(CreateDownloadDto, AdditionalCreateDownloadInfo) {}

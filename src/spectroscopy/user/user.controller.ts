@@ -8,7 +8,6 @@ import { AuthService } from 'src/auth/auth.service';
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly authService: AuthService
   ) {}
 
   @Post()
@@ -18,9 +17,7 @@ export class UserController {
 
   @Get()
   findAll() {
-    const jwt_decode = this.authService.getJWTDecode();
-    if (jwt_decode) this.userService.findAll(jwt_decode['sub'])
-    throw new UnauthorizedException()
+    return this.userService.findAll()
   }
 
   @Get(':id')

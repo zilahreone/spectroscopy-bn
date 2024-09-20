@@ -11,7 +11,7 @@ export class User {
   @Column('boolean', { default: false })
   is_active: boolean;
 
-  @CreateDateColumn({ default: 'NOW()' })
+  @CreateDateColumn()
   created_date: Date
 
   @Column({ nullable: true })
