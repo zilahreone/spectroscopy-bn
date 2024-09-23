@@ -11,7 +11,7 @@ export class Measurement {
   @Column()
   parameters: string;
 
-  @Column('json')
+  @Column('json', { nullable: true })
   files: Files[]
 
   @OneToMany(() => Download, (download: Download) => download.measurement)

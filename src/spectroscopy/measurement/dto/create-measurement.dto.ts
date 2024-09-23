@@ -1,15 +1,35 @@
-import { IsDefined, IsOptional } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDefined, IsOptional, ValidateNested } from "class-validator";
 
-export class CreateMeasurementDto {
-  id: string;
+class Files {
+  @IsDefined()
+  name: string
+
+  // @IsOptional()
+  // path: string
 
   @IsDefined()
-  name: string;
+  size: number
 
   @IsOptional()
-  description: string;
+  mime_type: string
 
+  @IsOptional()
+  file_ext: string
+}
+
+export class CreateMeasurementDto {
   @IsDefined()
-  instrument: string;
+  parameters: string;
 
+  @ValidateNested()
+  @Type(() => Files)
+  @IsOptional()
+  files: Files[]
+
+}
+
+export class AdditionalMeasurementInfo {
+  @IsDefined()
+  id: string;
 }

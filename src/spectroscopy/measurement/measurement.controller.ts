@@ -19,16 +19,16 @@ export class MeasurementController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.measurementService.findOne(+id);
+    return this.measurementService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMeasurementDto: UpdateMeasurementDto) {
-    return this.measurementService.update(+id, updateMeasurementDto);
+    return this.measurementService.update(id, updateMeasurementDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.measurementService.remove(+id);
+    return this.measurementService.remove(id);
   }
 }

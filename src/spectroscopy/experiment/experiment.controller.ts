@@ -19,16 +19,16 @@ export class ExperimentController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.experimentService.findOne(+id);
+    return this.experimentService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateExperimentDto: UpdateExperimentDto) {
-    return this.experimentService.update(+id, updateExperimentDto);
+    return this.experimentService.update(id, updateExperimentDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.experimentService.remove(+id);
+    return this.experimentService.remove(id);
   }
 }

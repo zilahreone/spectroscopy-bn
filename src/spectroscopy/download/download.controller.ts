@@ -2,10 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { DownloadService } from './download.service';
 import { CreateDownloadDto } from './dto/create-download.dto';
 import { UpdateDownloadDto } from './dto/update-download.dto';
+import { MeasurementService } from '../measurement/measurement.service';
 
 @Controller('download')
 export class DownloadController {
-  constructor(private readonly downloadService: DownloadService) {}
+  constructor(
+    private readonly downloadService: DownloadService,
+  ) {}
 
   @Post()
   create(@Body() createDownloadDto: CreateDownloadDto) {

@@ -1,13 +1,18 @@
 import { IsDefined } from "class-validator";
 
 export class CreateExperimentDto {
-  id: string;
-
   @IsDefined()
   experiment_name: string;
 
   @IsDefined()
-  chemical_name: string;
-
+  material_name: string;
   
+  @IsDefined()
+  instrument: string;
+  
+}
+
+export class AdditionalExperimentInfo {
+  @IsDefined()
+  id: string;
 }

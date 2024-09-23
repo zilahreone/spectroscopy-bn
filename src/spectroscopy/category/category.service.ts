@@ -19,8 +19,8 @@ export class CategoryService {
     }
   }
 
-  findAll() {
-    return `This action returns all category`;
+  async findAll() {
+    return await this.repository.find({ relations: { samples: true } })
   }
 
   async findOne(id: string) {

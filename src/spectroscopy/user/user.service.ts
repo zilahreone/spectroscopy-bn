@@ -22,17 +22,18 @@ export class UserService {
   }
 
   async findAll() {
-    const jwt_decode = this.authService.getJWTDecode();
-    if (jwt_decode) {
-      try {
-        return await this.repository.findBy({
-          id: jwt_decode['sub']
-        });
-      } catch (err) {
-        throw new NotImplementedException(`${err}`);
-      }
-    }
-    throw new UnauthorizedException();
+    // const jwt_decode = this.authService.getJWTDecode();
+    // if (jwt_decode) {
+    //   try {
+    //     return await this.repository.findBy({
+    //       id: jwt_decode['sub']
+    //     });
+    //   } catch (err) {
+    //     throw new NotImplementedException(`${err}`);
+    //   }
+    // }
+    // throw new UnauthorizedException();
+    return await this.repository.find({ relations: { downloads: true } })
   }
 
   async findOne(id: string) {

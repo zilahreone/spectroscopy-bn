@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateExperimentDto } from './create-experiment.dto';
+import { IntersectionType, PartialType } from '@nestjs/swagger';
+import { AdditionalExperimentInfo, CreateExperimentDto } from './create-experiment.dto';
 
-export class UpdateExperimentDto extends PartialType(CreateExperimentDto) {}
+export class UpdateExperimentDto extends IntersectionType(CreateExperimentDto, AdditionalExperimentInfo) {}

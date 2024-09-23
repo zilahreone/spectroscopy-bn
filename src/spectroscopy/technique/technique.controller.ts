@@ -19,16 +19,16 @@ export class TechniqueController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.techniqueService.findOne(+id);
+    return this.techniqueService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTechniqueDto: UpdateTechniqueDto) {
-    return this.techniqueService.update(+id, updateTechniqueDto);
+    return this.techniqueService.update(id, updateTechniqueDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.techniqueService.remove(+id);
+    return this.techniqueService.remove(id);
   }
 }

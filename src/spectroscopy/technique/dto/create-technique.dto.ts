@@ -4,6 +4,11 @@ export class CreateTechniqueDto {
   @IsDefined()
   name: string;
 
-  @IsOptional()
+  @IsDefined()
   description: string;
+}
+
+export class AdditionalTechniqueInfo {
+  @IsDefined()
+  id: string;
 }

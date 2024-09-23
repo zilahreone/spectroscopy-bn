@@ -20,7 +20,7 @@ export class MaterialService {
   }
 
   async findAll() {
-    return `This action returns all material`;
+    return await this.repository.find({ relations: { samples: true } })
   }
 
   async findOne(id: string) {

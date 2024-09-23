@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateTechniqueDto } from './create-technique.dto';
+import { IntersectionType, PartialType } from '@nestjs/swagger';
+import { AdditionalTechniqueInfo, CreateTechniqueDto } from './create-technique.dto';
 
-export class UpdateTechniqueDto extends PartialType(CreateTechniqueDto) {}
+export class UpdateTechniqueDto extends IntersectionType(CreateTechniqueDto, AdditionalTechniqueInfo) {}
