@@ -1,7 +1,7 @@
-import { IsDefined, IsOptional } from "class-validator";
+import { IsDefined, IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 
 export class CreateOrganizationDto {
-  @IsDefined()
+  @IsNotEmpty()
   name: string;
 
   @IsOptional()
@@ -12,6 +12,7 @@ export class CreateOrganizationDto {
 }
 
 export class AdditionalOrganizationInfo {
-  @IsDefined()
+  @IsUUID(4)
+  @IsNotEmpty()
   id: string;
 }

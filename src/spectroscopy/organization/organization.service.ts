@@ -20,13 +20,13 @@ export class OrganizationService {
     }
   }
 
-  findAll() {
-    return `This action returns all organization`;
+  async findAll() {
+    return await this.repository.find({ relations: { users: true, experiments: true, samples: true } });
   }
 
   async findOne(id: string) {
     try {
-      return await this.repository.findOneByOrFail({ id });
+      return await this.repository.findOneByOrFail({ name: id });
     } catch (error) {
       throw new NotFoundException(`${error}`);
     }

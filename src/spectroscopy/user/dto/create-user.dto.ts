@@ -1,15 +1,12 @@
-import { IsBoolean, IsDefined, IsEmail, IsNotEmptyObject, IsObject, IsOptional } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsNotEmptyObject, IsObject, IsOptional, IsUUID } from "class-validator";
 
 export class CreateUserDto {
-  @IsDefined()
+  @IsNotEmpty()
   id: string;
 
   @IsBoolean()
   @IsOptional()
   is_active: boolean;
-
-  // @IsDefined()
-  // organization_id: string;
 
   @IsOptional()
   preferred_username: string;
@@ -25,7 +22,10 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmptyObject()
-  @IsObject()
-  @IsDefined()
+  @IsNotEmpty()
   user: object;
+
+  @IsUUID(4)
+  @IsNotEmpty()
+  organization_id: string;
 }

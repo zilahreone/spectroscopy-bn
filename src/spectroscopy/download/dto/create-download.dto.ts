@@ -1,20 +1,16 @@
-import { IsDefined } from "class-validator";
+import { IsDefined, IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 
 export class CreateDownloadDto {
+  @IsNotEmpty()
+  measurement_id: string;
   
-  // @IsDefined()
-  // @ValidateNested()
-  // @Type(() => CreateMeasurementDto)
-  // measurement: CreateMeasurementDto
-
-  // @IsDefined()
-  // @ValidateNested()
-  // @Type(() => CreateUserDto)
-  // user: CreateUserDto
-
+  @IsNotEmpty()
+  @IsOptional()
+  user_id: string;
 }
 
 export class AdditionalCreateDownloadInfo {
-  @IsDefined()
+  @IsUUID(4)
+  @IsNotEmpty()
   id: string;
 }

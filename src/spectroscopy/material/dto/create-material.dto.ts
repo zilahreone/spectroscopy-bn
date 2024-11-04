@@ -1,7 +1,7 @@
-import { IsDefined, IsOptional } from "class-validator";
+import { IsDefined, IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 
 export class CreateMaterialDto {
-  @IsDefined()
+  @IsNotEmpty()
   name: string;
 
   @IsOptional()
@@ -9,6 +9,7 @@ export class CreateMaterialDto {
 }
 
 export class AdditionalCreateMaterialInfo {
-  @IsDefined()
+  @IsUUID(4)
+  @IsNotEmpty()
   id: string;
 }

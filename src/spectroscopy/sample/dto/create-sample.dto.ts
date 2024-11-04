@@ -1,14 +1,14 @@
 import { Type } from "class-transformer";
-import { IsDefined, IsOptional, ValidateNested } from "class-validator";
+import { IsDefined, IsNotEmpty, IsOptional, IsUUID, ValidateNested } from "class-validator";
 
 class Files {
-  @IsDefined()
+  @IsNotEmpty()
   name: string
 
   // @IsOptional()
   // path: string
 
-  @IsDefined()
+  @IsNotEmpty()
   size: number
 
   @IsOptional()
@@ -19,19 +19,19 @@ class Files {
 }
 
 export class CreateSampleDto {
-  @IsDefined()
+  @IsNotEmpty()
   name: string;
 
   @IsOptional()
   description: string;
 
-  @IsDefined()
+  @IsNotEmpty()
   form: string;
 
-  @IsDefined()
+  @IsNotEmpty()
   source: string;
 
-  @IsDefined()
+  @IsNotEmpty()
   note: string;
 
   @ValidateNested()
@@ -43,9 +43,22 @@ export class CreateSampleDto {
   @Type(() => Files)
   @IsOptional()
   images: Files[];
+
+  @IsUUID(4)
+  @IsNotEmpty()
+  material_id: string;
+
+  @IsUUID(4)
+  @IsNotEmpty()
+  category_id: string;
+
+  @IsUUID(4)
+  @IsNotEmpty()
+  organization_id: string;
 }
 
 export class AdditionalSampleInfo {
-  @IsDefined()
+  @IsUUID(4)
+  @IsNotEmpty()
   id: string;
 }

@@ -20,6 +20,32 @@ export class MaterialService {
   }
 
   async findAll() {
+    // const chem: string[] = [
+    //   'Glucose',
+    //   'Fructose',
+    //   'D-Xylose',
+    //   'L-Xylose',
+    //   'Arabinose',
+    //   'Sorbitol',
+    //   'Xylitol',
+    //   'FDCA',
+    //   'Glycolic acid',
+    //   'Citric acid',
+    //   'Succinic acid',
+    //   'Isosorbide',
+    //   'Furfural',
+    //   'Furfuryl alcohol',
+    //   '5-HMF',
+    //   'Levulinic acid',
+    //   'r-Valerolactone',
+    //   'D-Lactic acid',
+    //   'L-Lactic acid',
+    //   'Formic acid',
+    //   'Acetic acid',
+    //   'Lactic acid']
+    // chem.forEach(c => this.create({ name: c, description: '' }))
+    // const all = await this.repository.find({ relations: { samples: true } })
+    // all.map(a => this.remove(a.id))
     return await this.repository.find({ relations: { samples: true } })
   }
 

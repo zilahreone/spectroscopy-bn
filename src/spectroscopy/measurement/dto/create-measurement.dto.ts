@@ -1,14 +1,14 @@
 import { Type } from "class-transformer";
-import { IsDefined, IsOptional, ValidateNested } from "class-validator";
+import { IsDefined, IsNotEmpty, IsOptional, IsUUID, ValidateNested } from "class-validator";
 
 class Files {
-  @IsDefined()
+  @IsNotEmpty()
   name: string
 
   // @IsOptional()
   // path: string
 
-  @IsDefined()
+  @IsNotEmpty()
   size: number
 
   @IsOptional()
@@ -19,7 +19,7 @@ class Files {
 }
 
 export class CreateMeasurementDto {
-  @IsDefined()
+  @IsNotEmpty()
   parameters: string;
 
   @ValidateNested()
@@ -30,6 +30,7 @@ export class CreateMeasurementDto {
 }
 
 export class AdditionalMeasurementInfo {
-  @IsDefined()
+  @IsUUID(4)
+  @IsNotEmpty()
   id: string;
 }

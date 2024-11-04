@@ -10,7 +10,7 @@ async function bootstrap() {
     transform: true,
     transformOptions: { enableImplicitConversion: true },
     whitelist: true,
-    stopAtFirstError: true
+    // stopAtFirstError: true
     // forbidUnknownValues: true,
     // forbidNonWhitelisted: true
   }));

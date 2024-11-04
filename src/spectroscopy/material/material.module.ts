@@ -9,6 +9,9 @@ import { Material } from './entities/material.entity';
   providers: [MaterialService],
   imports: [
     TypeOrmModule.forFeature([Material])
+  ],
+  exports: [
+    MaterialService
   ]
 })
 export class MaterialModule {}

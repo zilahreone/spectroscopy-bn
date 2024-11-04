@@ -1,7 +1,7 @@
-import { IsDefined, IsOptional } from "class-validator";
+import { IsDefined, IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 
 export class CreateCategoryDto {
-  @IsDefined()
+  @IsNotEmpty()
   name: string;
 
   @IsOptional()
@@ -9,6 +9,7 @@ export class CreateCategoryDto {
 }
 
 export class AdditionalCreateCategoryInfo {
-  @IsDefined()
+  @IsUUID(4)
+  @IsNotEmpty()
   id: string;
 }

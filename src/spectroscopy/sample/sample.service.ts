@@ -4,16 +4,25 @@ import { UpdateSampleDto } from './dto/update-sample.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Sample } from './entities/sample.entity';
+import { MaterialService } from '../material/material.service';
+import { CategoryService } from '../category/category.service';
+import { OrganizationService } from '../organization/organization.service';
 
 @Injectable()
 export class SampleService {
   constructor(
     @InjectRepository(Sample)
     private readonly repository: Repository<Sample>,
+    private readonly materialService: MaterialService,
+    private readonly categoryService: CategoryService,
+    private readonly organizationService: OrganizationService,
   ) { }
   async create(createSampleDto: CreateSampleDto) {
+    const material = await this.materialService.findOne(createSampleDto.material_id)
+    const category = await this.categoryService.findOne(createSampleDto.category_id)
+    const organization = await this.organizationService.findOne(createSampleDto.organization_id)
     try {
-      return await this.repository.save(createSampleDto)
+      return await this.repository.save({...createSampleDto, material: material, category: category, organization: organization})
     } catch (error) {
       throw new NotImplementedException(`${error}`)
     }

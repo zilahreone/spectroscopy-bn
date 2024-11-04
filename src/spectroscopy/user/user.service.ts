@@ -5,17 +5,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { AuthService } from 'src/auth/auth.service';
+import { OrganizationService } from '../organization/organization.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly repository: Repository<User>,
+    private readonly organizationService: OrganizationService,
     private readonly authService: AuthService
   ) { }
+
   async create(createUserDto: CreateUserDto) {
+    const organization = await this.organizationService.findOne(createUserDto.organization_id)
     try {
-      return await this.repository.insert(createUserDto)
+      return await this.repository.insert({...createUserDto, organization: organization})
     } catch (err) {
       throw new NotImplementedException(`${err}`)
     }
@@ -33,7 +37,7 @@ export class UserService {
     //   }
     // }
     // throw new UnauthorizedException();
-    return await this.repository.find({ relations: { downloads: true } })
+    return await this.repository.find({ relations: { downloads: true, organization: true } })
   }
 
   async findOne(id: string) {

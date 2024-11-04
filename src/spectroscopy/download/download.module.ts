@@ -5,13 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Download } from './entities/download.entity';
 import { MeasurementService } from '../measurement/measurement.service';
 import { MeasurementModule } from '../measurement/measurement.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   controllers: [DownloadController],
   providers: [DownloadService],
   imports: [
     TypeOrmModule.forFeature([Download]),
-    MeasurementModule
+    MeasurementModule,
+    UserModule
   ]
 })
 export class DownloadModule {}

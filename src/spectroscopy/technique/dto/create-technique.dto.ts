@@ -1,14 +1,15 @@
-import { IsDefined, IsOptional } from "class-validator";
+import { IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 
 export class CreateTechniqueDto {
-  @IsDefined()
+  @IsNotEmpty()
   name: string;
 
-  @IsDefined()
+  @IsOptional()
   description: string;
 }
 
 export class AdditionalTechniqueInfo {
-  @IsDefined()
+  @IsUUID(4)
+  @IsNotEmpty()
   id: string;
 }

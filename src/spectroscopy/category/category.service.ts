@@ -25,7 +25,7 @@ export class CategoryService {
 
   async findOne(id: string) {
     try {
-      return await this.repository.findOneByOrFail({ id });
+      return await this.repository.findOneByOrFail({ name: id });
     } catch (error) {
       throw new NotFoundException(`${error}`);
     }

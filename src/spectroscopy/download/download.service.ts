@@ -5,6 +5,7 @@ import { Download } from './entities/download.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MeasurementService } from '../measurement/measurement.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class DownloadService {
@@ -12,14 +13,16 @@ export class DownloadService {
     @InjectRepository(Download)
     private readonly repository: Repository<Download>,
     private readonly measurementService: MeasurementService,
+    private readonly userService: UserService,
   ) { }
   async create(createDownloadDto: CreateDownloadDto) {
-    const getMeasurement = await this.measurementService.findOne('eaef94ee-dd62-4a33-863e-470a6743e051');
-    return await this.repository.save({ ...createDownloadDto, measurement: getMeasurement })
+    const getMeasurement = await this.measurementService.findOne(createDownloadDto.measurement_id);
+    const getUser = await this.userService.findOne(createDownloadDto.user_id);
+    return await this.repository.save({ ...createDownloadDto, measurement: getMeasurement, user: getUser })
   }
 
   async findAll() {
-    return await this.repository.find({ relations: { measurement: true } });
+    return await this.repository.find({ relations: { measurement: true, user: true } });
   }
 
   async findOne(id: string) {
@@ -42,7 +45,6 @@ export class DownloadService {
   async remove(id: string) {
     await this.findOne(id);
     try {
-      console.log();
       return await this.repository.delete({ id })
     } catch (error) {
       throw new NotImplementedException(`${error}`);
