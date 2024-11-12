@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Header } from '@nestjs/common';
 import { MeasurementService } from './measurement.service';
 import { CreateMeasurementDto } from './dto/create-measurement.dto';
 import { UpdateMeasurementDto } from './dto/update-measurement.dto';
@@ -31,4 +31,16 @@ export class MeasurementController {
   remove(@Param('id') id: string) {
     return this.measurementService.remove(id);
   }
+
+  @Get(':id/file/:name')
+  getFile(@Param() params: { id: string, name: string }) {
+    console.log(params.id, params.name);
+    
+    // type Params = {
+    //   id: string,
+    //   name: string
+    // }
+    // const { id, name } = params as object as Params
+    // return this.measurementService.findFile(id, name)
+  }  
 }

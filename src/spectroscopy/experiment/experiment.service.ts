@@ -35,7 +35,7 @@ export class ExperimentService {
   }
 
   async findAll() {
-    return `This action returns all experiment`;
+    return await this.repository.find({ relations: { sample: true, organization: true, user: true, measurement: true, technique: true } })
   }
 
   async findOne(id: string) {

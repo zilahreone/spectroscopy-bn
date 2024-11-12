@@ -3,7 +3,7 @@ import { ExperimentService } from './experiment.service';
 import { CreateExperimentDto } from './dto/create-experiment.dto';
 import { UpdateExperimentDto } from './dto/update-experiment.dto';
 
-@Controller('experiment')
+@Controller('experiments')
 export class ExperimentController {
   constructor(private readonly experimentService: ExperimentService) {}
 
