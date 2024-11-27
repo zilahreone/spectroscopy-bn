@@ -2,33 +2,48 @@ import { IsDefined, IsNotEmpty, IsUUID } from "class-validator";
 
 export class CreateExperimentDto {
   @IsDefined()
-  experiment_name: string;
+  name: string;
 
   @IsDefined()
-  material_name: string;
+  chemicalName: string;
+  
+  @IsDefined()
+  chemicalId: string;
 
   @IsDefined()
-  instrument: string;
+  instrumentName: string;
+  
+  @IsDefined()
+  instrumentId: string;
 
   @IsUUID(4)
   @IsNotEmpty()
-  user_id: string;
+  userId: string;
 
   @IsUUID(4)
   @IsNotEmpty()
-  sample_id: string;
+  sampleId: string;
 
   @IsUUID(4)
   @IsNotEmpty()
-  organization_id: string;
+  organizationId: string;
+  
+  @IsNotEmpty()
+  organizationName: string;
 
   @IsUUID(4)
   @IsNotEmpty()
-  technique_id: string;
+  techniqueId: string;
+ 
+  @IsNotEmpty()
+  techniqueName: string;
 
   @IsUUID(4)
   @IsNotEmpty()
-  measurement_id: string;
+  measurementId: string;
+  
+  @IsNotEmpty()
+  measurementName: string;
 
 }
 

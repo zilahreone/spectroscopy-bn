@@ -21,7 +21,10 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { HttpExceptionFilter } from './all-exceptions.filter';
 import { User } from './spectroscopy/user/entities/user.entity';
 import { ExperimentModule } from './spectroscopy/experiment/experiment.module';
-import { MaterialModule } from './spectroscopy/material/material.module';
+import { ChemicalModule } from './spectroscopy/chemical/chemical.module';
+import { NestjsFormDataModule } from 'nestjs-form-data';
+import { InstrumentModule } from './spectroscopy/instrument/instrument.module';
+import { EquipmentTypeModule } from './spectroscopy/equipment-type/equipment-type.module';
 
 @Module({
   controllers: [AppController],
@@ -52,13 +55,15 @@ import { MaterialModule } from './spectroscopy/material/material.module';
     CategoryModule,
     SampleModule,
     ExperimentModule,
-    MaterialModule,
+    ChemicalModule,
+    InstrumentModule,
+    EquipmentTypeModule,
     // ServeStaticModule.forRoot({
     // resolve`('./uploads/test/test/')
     // serveStaticOptions: { index: false },
     // rootPath: join(__dirname, '..', 'uploads'),
     // serveRoot: 'uploads',
     // }),
-  ],
+  ]
 })
 export class AppModule { }

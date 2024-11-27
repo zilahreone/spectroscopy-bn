@@ -1,6 +1,6 @@
 import { IsDefined, IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 
-export class CreateMaterialDto {
+export class CreateChemicalDto {
   @IsNotEmpty()
   name: string;
 
@@ -8,7 +8,7 @@ export class CreateMaterialDto {
   description: string;
 }
 
-export class AdditionalCreateMaterialInfo {
+export class AdditionalCreateChemicalInfo {
   @IsUUID(4)
   @IsNotEmpty()
   id: string;

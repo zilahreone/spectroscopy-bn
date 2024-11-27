@@ -16,8 +16,8 @@ export class DownloadService {
     private readonly userService: UserService,
   ) { }
   async create(createDownloadDto: CreateDownloadDto) {
-    const getMeasurement = await this.measurementService.findOne(createDownloadDto.measurement_id);
-    const getUser = await this.userService.findOne(createDownloadDto.user_id);
+    const getMeasurement = await this.measurementService.findOne(createDownloadDto.measurementId);
+    const getUser = await this.userService.findOne(createDownloadDto.userId);
     return await this.repository.save({ ...createDownloadDto, measurement: getMeasurement, user: getUser })
   }
 

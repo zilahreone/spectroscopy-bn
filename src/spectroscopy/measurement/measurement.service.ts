@@ -15,7 +15,7 @@ export class MeasurementService {
   ) { }
   async create(createMeasurementDto: CreateMeasurementDto) {
     try {
-      return await this.repository.save(createMeasurementDto)
+      // return await this.repository.save(createMeasurementDto.data)
     } catch (error) {
       throw new NotImplementedException(`${error}`)
     }
@@ -36,7 +36,7 @@ export class MeasurementService {
   async update(id: string, updateMeasurementDto: UpdateMeasurementDto) {
     await this.findOne(id);
     try {
-      return await this.repository.update(id, updateMeasurementDto);
+      return await this.repository.update(id, updateMeasurementDto.data);
     } catch (error) {
       throw new NotImplementedException(`${error}`);
     }
@@ -58,7 +58,7 @@ export class MeasurementService {
     const file = createReadStream(join(process.cwd(), `/uploads/${id}/measurements/${name}`));
     return new StreamableFile(file, {
       type: 'application/json',
-      disposition: 'attachment; filename="package.json"',
+      // disposition: 'attachment; filename="package.json"',
       // If you want to define the Content-Length value to another value instead of file's length:
       // length: 123,
     })

@@ -14,12 +14,12 @@ export class Download {
   measurement: Measurement;
 
   @RelationId((download: Download) => download.measurement) // you need to specify target relation
-  measurement_id: string
+  measurementId: string
   
   @ManyToOne(() => User, (user: User) => user.downloads)
   user: User;
 
   @RelationId((download: Download) => download.user) // you need to specify target relation
-  user_id: string
+  userId: string
   
 }

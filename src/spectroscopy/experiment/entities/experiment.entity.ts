@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsUUID } from "class-validator";
+import { Instrument } from "src/spectroscopy/instrument/entities/instrument.entity";
 import { Measurement } from "src/spectroscopy/measurement/entities/measurement.entity";
 import { Organization } from "src/spectroscopy/organization/entities/organization.entity";
 import { Sample } from "src/spectroscopy/sample/entities/sample.entity";
@@ -12,48 +13,50 @@ export class Experiment {
   id: string;
   
   @Column()
-  experiment_name: string;
+  Name: string;
 
   @Column()
-  material_name: string;
+  materialName: string;
 
   @CreateDateColumn()
-  create_at: Date;
+  createAt: Date;
 
   @UpdateDateColumn({ nullable: true })
-  update_at: Date;
-
-  @Column()
-  instrument: string;
+  updateAt: Date;
 
   @ManyToOne(() => User, (user: User) => user.experiments)
   user: User;
 
   @RelationId((experiment: Experiment) => experiment.user) // you need to specify target relation
-  user_id: string
+  userId: string
   
   @ManyToOne(() => Sample, (sample: Sample) => sample.experiments)
   sample: Sample;
 
   @RelationId((experiment: Experiment) => experiment.sample) // you need to specify target relation
-  sample_id: string
+  sampleId: string
   
   @ManyToOne(() => Organization, (organization: Organization) => organization.experiments)
   organization: Organization;
 
   @RelationId((experiment: Experiment) => experiment.organization) // you need to specify target relation
-  organization_id: string
+  organizationId: string
 
   @ManyToOne(() => Technique, (technique: Technique) => technique.experiments)
   technique: Technique;
 
   @RelationId((experiment: Experiment) => experiment.technique) // you need to specify target relation
-  technique_id: string
+  techniqueId: string
 
   @ManyToOne(() => Measurement, (measurement: Measurement) => measurement.experiments)
   measurement: Measurement;
-
-  @RelationId((experiment: Experiment) => experiment.measurement) // you need to specify target relation
-  measurement_id: string
   
+  @RelationId((experiment: Experiment) => experiment.measurement) // you need to specify target relation
+  measurementId: string
+  
+  // @ManyToOne(() => Instrument, (instrument: Instrument) => instrument.experiments)
+  // instrument: Instrument;
+  
+  // @RelationId((experiment: Experiment) => experiment.instrument) // you need to specify target relation
+  // instrumentId: string
 }

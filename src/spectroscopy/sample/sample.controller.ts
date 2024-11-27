@@ -2,12 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SampleService } from './sample.service';
 import { CreateSampleDto } from './dto/create-sample.dto';
 import { UpdateSampleDto } from './dto/update-sample.dto';
+import { FormDataRequest } from 'nestjs-form-data';
 
 @Controller('sample')
 export class SampleController {
   constructor(private readonly sampleService: SampleService) {}
 
   @Post()
+  @FormDataRequest()
   create(@Body() createSampleDto: CreateSampleDto) {
     return this.sampleService.create(createSampleDto);
   }
@@ -23,6 +25,7 @@ export class SampleController {
   }
 
   @Patch(':id')
+  @FormDataRequest()
   update(@Param('id') id: string, @Body() updateSampleDto: UpdateSampleDto) {
     return this.sampleService.update(id, updateSampleDto);
   }

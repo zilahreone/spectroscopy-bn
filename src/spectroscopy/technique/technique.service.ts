@@ -4,28 +4,31 @@ import { UpdateTechniqueDto } from './dto/update-technique.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Technique } from './entities/technique.entity';
 import { Repository } from 'typeorm';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class TechniqueService {
   constructor(
     @InjectRepository(Technique)
     private readonly repository: Repository<Technique>,
+    private readonly categoryService: CategoryService,
   ) { }
   async create(createTechniqueDto: CreateTechniqueDto) {
+    const category = await this.categoryService.findOne(createTechniqueDto.categoryName)
     try {
-      return await this.repository.save(createTechniqueDto)
+      return await this.repository.save({...createTechniqueDto, category})
     } catch (error) {
       throw new NotImplementedException(`${error}`)
     }
   }
 
   async findAll() {
-    return await this.repository.find({ relations: { experiments: true } })
+    return await this.repository.find({ relations: { instruments: { equipmentType: true }, experiments: true } })
   }
 
   async findOne(id: string) {
     try {
-      return await this.repository.findOneByOrFail({ id });
+      return await this.repository.findOneByOrFail({id});
     } catch (error) {
       throw new NotFoundException(`${error}`);
     }
@@ -43,7 +46,6 @@ export class TechniqueService {
   async remove(id: string) {
     await this.findOne(id);
     try {
-      console.log();
       return await this.repository.delete({ id })
     } catch (error) {
       throw new NotImplementedException(`${error}`);

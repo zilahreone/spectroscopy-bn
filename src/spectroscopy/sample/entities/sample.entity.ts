@@ -1,6 +1,6 @@
 import { Category } from "src/spectroscopy/category/entities/category.entity";
 import { Experiment } from "src/spectroscopy/experiment/entities/experiment.entity";
-import { Material } from "src/spectroscopy/material/entities/material.entity";
+import { Chemical } from "src/spectroscopy/chemical/entities/chemical.entity";
 import { Organization } from "src/spectroscopy/organization/entities/organization.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId, Unique, UpdateDateColumn } from "typeorm";
 
@@ -31,35 +31,37 @@ export class Sample {
   @Column('json')
   images: Files[]
 
-  @CreateDateColumn()
-  create_at: Date;
+  @CreateDateColumn({ name: 'create_at' })
+  createAt: Date;
 
-  @UpdateDateColumn({ nullable: true })
-  update_at: Date;
+  @UpdateDateColumn({ nullable: true, name: 'update_at' })
+  updateAt: Date;
 
-  @ManyToOne(() => Material, (material: Material) => material.samples)
-  material: Material;
+  @ManyToOne(() => Chemical, (chemical: Chemical) => chemical.samples)
+  chemical: Chemical;
 
-  @RelationId((sample: Sample) => sample.material) // you need to specify target relation
-  material_id: string
+  // @RelationId((sample: Sample) => sample.chemical) // you need to specify target relation
+  // @Column()
+  // materialId: string
 
   @OneToMany(() => Experiment, (experiment: Experiment) => experiment.sample)
   experiments: Experiment[];
 
   @RelationId((sample: Sample) => sample.experiments)
-  experiments_id: string[]
+  experimentsId: string[]
 
-  @ManyToOne(() => Category, (category: Category) => category.samples)
-  category: Category;
+  // @ManyToOne(() => Category, (category: Category) => category.samples)
+  // category: Category;
 
-  @RelationId((sample: Sample) => sample.category) // you need to specify target relation
-  category_id: string
+  // @RelationId((sample: Sample) => sample.category) // you need to specify target relation
+  // categoryId: string
   
   @ManyToOne(() => Organization, (organization: Organization) => organization.samples)
   organization: Organization;
 
   @RelationId((sample: Sample) => sample.organization) // you need to specify target relation
-  organization_id: string
+  @Column()
+  organizationId: string
   
 }
 
@@ -74,8 +76,8 @@ class Files {
   size: number
   
   @Column()
-  mime_type: string
+  mimeType: string
   
   @Column()
-  file_ext: string
+  fileExt: string
 }

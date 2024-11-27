@@ -17,7 +17,7 @@ export class UserService {
   ) { }
 
   async create(createUserDto: CreateUserDto) {
-    const organization = await this.organizationService.findOne(createUserDto.organization_id)
+    const organization = await this.organizationService.findOne(createUserDto.organizationId)
     try {
       return await this.repository.insert({...createUserDto, organization: organization})
     } catch (err) {

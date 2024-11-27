@@ -8,6 +8,7 @@ import { OrganizationModule } from '../organization/organization.module';
 import { UserModule } from '../user/user.module';
 import { MeasurementModule } from '../measurement/measurement.module';
 import { TechniqueModule } from '../technique/technique.module';
+import { InstrumentModule } from '../instrument/instrument.module';
 
 @Module({
   controllers: [ExperimentController],
@@ -18,7 +19,8 @@ import { TechniqueModule } from '../technique/technique.module';
     OrganizationModule,
     UserModule,
     MeasurementModule,
-    TechniqueModule
+    TechniqueModule,
+    InstrumentModule
   ]
 })
 export class ExperimentModule {}

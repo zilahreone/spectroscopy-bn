@@ -9,6 +9,7 @@ import { MeasurementService } from '../measurement/measurement.service';
 import { UserService } from '../user/user.service';
 import { OrganizationService } from '../organization/organization.service';
 import { SampleService } from '../sample/sample.service';
+import { InstrumentService } from 'src/spectroscopy/instrument/instrument.service';
 
 @Injectable()
 export class ExperimentService {
@@ -20,15 +21,17 @@ export class ExperimentService {
     private readonly userService: UserService,
     private readonly organizationService: OrganizationService,
     private readonly sampleService: SampleService,
+    private readonly instrumentService: InstrumentService,
   ) { }
   async create(createExperimentDto: CreateExperimentDto) {
-    const technique = await this.techniqueService.findOne(createExperimentDto.technique_id);
-    const measurement = await this.measurementService.findOne(createExperimentDto.measurement_id);
-    const user = await this.userService.findOne(createExperimentDto.user_id);
-    const organization = await this.organizationService.findOne(createExperimentDto.organization_id);
-    const sample = await this.sampleService.findOne(createExperimentDto.sample_id);
+    const technique = await this.techniqueService.findOne(createExperimentDto.techniqueId);
+    const measurement = await this.measurementService.findOne(createExperimentDto.measurementId);
+    const user = await this.userService.findOne(createExperimentDto.userId);
+    const organization = await this.organizationService.findOne(createExperimentDto.organizationId);
+    const sample = await this.sampleService.findOne(createExperimentDto.sampleId);
+    const instrument = await this.instrumentService.findOne(createExperimentDto.instrumentId);
     try {
-      return await this.repository.save({...createExperimentDto, technique, measurement, user, organization, sample})
+      return await this.repository.save({...createExperimentDto, technique, measurement, user, organization, sample, instrument})
     } catch (error) {
       throw new NotImplementedException(`${error}`)
     }

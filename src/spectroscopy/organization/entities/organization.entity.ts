@@ -22,17 +22,17 @@ export class Organization {
   users: User[];
 
   @RelationId((organization: Organization) => organization.users)
-  users_id: string[]
+  usersId: string[]
   
   @OneToMany(() => Experiment, (experiment: Experiment) => experiment.organization)
   experiments: Experiment[];
 
   @RelationId((organization: Organization) => organization.experiments)
-  experiments_id: string[]
+  experimentsId: string[]
   
   @OneToMany(() => Sample, (sample: Sample) => sample.organization)
   samples: Sample[];
 
   @RelationId((organization: Organization) => organization.samples)
-  samples_id: string[]
+  samplesId: string[]
 }

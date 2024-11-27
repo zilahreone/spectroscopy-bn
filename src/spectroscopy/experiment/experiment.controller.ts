@@ -3,13 +3,14 @@ import { ExperimentService } from './experiment.service';
 import { CreateExperimentDto } from './dto/create-experiment.dto';
 import { UpdateExperimentDto } from './dto/update-experiment.dto';
 
-@Controller('experiments')
+@Controller('experiment')
 export class ExperimentController {
   constructor(private readonly experimentService: ExperimentService) {}
 
   @Post()
   create(@Body() createExperimentDto: CreateExperimentDto) {
-    return this.experimentService.create(createExperimentDto);
+    console.log(createExperimentDto);
+    // return this.experimentService.create(createExperimentDto);
   }
 
   @Get()

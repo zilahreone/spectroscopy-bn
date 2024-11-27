@@ -1,19 +1,19 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
-import { CreateMaterialDto } from './dto/create-material.dto';
-import { UpdateMaterialDto } from './dto/update-material.dto';
+import { CreateChemicalDto } from './dto/create-chemical.dto';
+import { UpdateChemicalDto } from './dto/update-chemical.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Material } from './entities/material.entity';
+import { Chemical } from './entities/chemical.entity';
 
 @Injectable()
-export class MaterialService {
+export class ChemicalService {
   constructor(
-    @InjectRepository(Material)
-    private readonly repository: Repository<Material>,
+    @InjectRepository(Chemical)
+    private readonly repository: Repository<Chemical>,
   ) { }
-  async create(createMaterialDto: CreateMaterialDto) {
+  async create(createChemicalDto: CreateChemicalDto) {
     try {
-      return await this.repository.save(createMaterialDto)
+      return await this.repository.save(createChemicalDto)
     } catch (error) {
       throw new NotImplementedException(`${error}`)
     }
@@ -46,21 +46,21 @@ export class MaterialService {
     // chem.forEach(c => this.create({ name: c, description: '' }))
     // const all = await this.repository.find({ relations: { samples: true } })
     // all.map(a => this.remove(a.id))
-    return await this.repository.find({ relations: { samples: true } })
+    return await this.repository.find({ relations: { } })
   }
 
   async findOne(id: string) {
     try {
-      return await this.repository.findOneByOrFail({ id });
+      return await this.repository.findOneByOrFail({ name: id });
     } catch (error) {
       throw new NotFoundException(`${error}`);
     }
   }
 
-  async update(id: string, updateMaterialDto: UpdateMaterialDto) {
+  async update(id: string, updateChemicalDto: UpdateChemicalDto) {
     await this.findOne(id);
     try {
-      return await this.repository.update(id, updateMaterialDto);
+      return await this.repository.update(id, updateChemicalDto);
     } catch (error) {
       throw new NotImplementedException(`${error}`);
     }
@@ -69,7 +69,6 @@ export class MaterialService {
   async remove(id: string) {
     await this.findOne(id);
     try {
-      console.log();
       return await this.repository.delete({ id })
     } catch (error) {
       throw new NotImplementedException(`${error}`);

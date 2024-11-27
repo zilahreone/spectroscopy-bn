@@ -2,11 +2,11 @@ import { IsDefined, IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 
 export class CreateDownloadDto {
   @IsNotEmpty()
-  measurement_id: string;
+  measurementId: string;
   
   @IsNotEmpty()
   @IsOptional()
-  user_id: string;
+  userId: string;
 }
 
 export class AdditionalCreateDownloadInfo {

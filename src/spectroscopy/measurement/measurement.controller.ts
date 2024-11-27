@@ -2,12 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Header } from '@nest
 import { MeasurementService } from './measurement.service';
 import { CreateMeasurementDto } from './dto/create-measurement.dto';
 import { UpdateMeasurementDto } from './dto/update-measurement.dto';
+import { FormDataRequest } from 'nestjs-form-data';
 
 @Controller('measurement')
 export class MeasurementController {
   constructor(private readonly measurementService: MeasurementService) {}
 
   @Post()
+  @FormDataRequest()
   create(@Body() createMeasurementDto: CreateMeasurementDto) {
     return this.measurementService.create(createMeasurementDto);
   }
@@ -34,13 +36,7 @@ export class MeasurementController {
 
   @Get(':id/file/:name')
   getFile(@Param() params: { id: string, name: string }) {
-    console.log(params.id, params.name);
-    
-    // type Params = {
-    //   id: string,
-    //   name: string
-    // }
-    // const { id, name } = params as object as Params
-    // return this.measurementService.findFile(id, name)
+    const { id, name } = params
+    return this.measurementService.findFile(id, name)
   }  
 }

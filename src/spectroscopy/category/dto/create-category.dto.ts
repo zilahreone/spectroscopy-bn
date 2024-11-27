@@ -3,9 +3,12 @@ import { IsDefined, IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 export class CreateCategoryDto {
   @IsNotEmpty()
   name: string;
-
+  
   @IsOptional()
   description: string;
+  
+  @IsNotEmpty()
+  chemicalId: string;
 }
 
 export class AdditionalCreateCategoryInfo {
