@@ -25,6 +25,7 @@ import { ChemicalModule } from './spectroscopy/chemical/chemical.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { InstrumentModule } from './spectroscopy/instrument/instrument.module';
 import { EquipmentTypeModule } from './spectroscopy/equipment-type/equipment-type.module';
+// import { FormModule } from './spectroscopy/form/form.module';
 
 @Module({
   controllers: [AppController],
@@ -58,6 +59,7 @@ import { EquipmentTypeModule } from './spectroscopy/equipment-type/equipment-typ
     ChemicalModule,
     InstrumentModule,
     EquipmentTypeModule,
+    // FormModule,
     // ServeStaticModule.forRoot({
     // resolve`('./uploads/test/test/')
     // serveStaticOptions: { index: false },

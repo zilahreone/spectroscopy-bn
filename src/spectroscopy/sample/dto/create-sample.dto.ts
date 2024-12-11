@@ -6,14 +6,14 @@ import { join } from "path";
 
 function checkUnicode(files: FileSystemStoredFile[]): FileSystemStoredFile[] {
   let attachments = files
-  attachments.forEach(file => {
+  attachments?.forEach(file => {
     if (!/[^\u0000-\u00ff]/.test(file?.originalName)) {
       const name = Buffer.from(file.originalName, 'latin1').toString('utf8')
       file.originalName = name
     }
   })
-  // console.log(attachments);
-  return attachments
+  // console.log(files);
+  return files
 }
 
 class Files {
@@ -40,13 +40,10 @@ class Data {
   @IsOptional()
   description: string;
 
-  @IsNotEmpty()
-  form: string;
-
-  @IsNotEmpty()
+  @IsOptional()
   source: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   note: string;
 
   @ValidateNested()
@@ -62,23 +59,28 @@ class Data {
   @IsUUID(4)
   @IsNotEmpty()
   chemicalId: string;
-  
+
   @IsNotEmpty()
   chemicalName: string;
 
   @IsUUID(4)
   @IsNotEmpty()
   categoryId: string;
-  
+
   @IsNotEmpty()
   categoryName: string;
 
   @IsUUID(4)
   @IsNotEmpty()
   organizationId: string;
-  
+
   @IsNotEmpty()
   organizationName: string;
+
+  @IsUUID(4)
+  @IsNotEmpty()
+  formId: string;
+
 }
 
 class AdditionalSampleInfo {
@@ -90,7 +92,7 @@ class AdditionalSampleInfo {
 class UpdateData extends IntersectionType(
   Data,
   AdditionalSampleInfo
-) {}
+) { }
 
 
 export class FileDto {
@@ -100,7 +102,7 @@ export class FileDto {
   @Transform(({ value }: { value: FileSystemStoredFile[] }) => checkUnicode(value))
   @IsOptional()
   images: FileSystemStoredFile;
-  
+
   @IsFiles({ each: true })
   @MaxFileSize(7 * 1024 * 1024, { each: true, message: 'Maximum file size is 7 MB' })
   @HasMimeType(['application/pdf', 'text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'], { each: true })
@@ -128,4 +130,4 @@ export class UpdateDataDto {
 export class CreateSampleDto extends IntersectionType(
   FileDto,
   CreateDataDto
-) {}
+) { }

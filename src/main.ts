@@ -2,6 +2,19 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { existsSync, mkdirSync } from 'fs';
+
+function checkExistsDir() {
+  const imagesDir: string = process.env.IMAGES_DIR
+  const attachmentsDir: string = process.env.ATTACHMENTS_DIR
+  const measurementsDir: string = process.env.MEASUREMENTS_DIR
+
+  Array.from([imagesDir, attachmentsDir, measurementsDir]).forEach((dirPath: string) => {
+    if (!existsSync(dirPath)) {
+      mkdirSync(dirPath, { recursive: true });
+    }
+  })
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { rawBody: true });
@@ -27,3 +40,4 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
+checkExistsDir();

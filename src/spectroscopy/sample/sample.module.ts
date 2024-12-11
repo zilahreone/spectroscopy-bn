@@ -7,6 +7,7 @@ import { ChemicalModule } from '../chemical/chemical.module';
 import { CategoryModule } from '../category/category.module';
 import { OrganizationModule } from '../organization/organization.module';
 import { FileSystemStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
+import { FormModule } from '../form/form.module';
 
 @Module({
   controllers: [SampleController],
@@ -16,6 +17,7 @@ import { FileSystemStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
     ChemicalModule,
     CategoryModule,
     OrganizationModule,
+    FormModule,
     NestjsFormDataModule.config({}),
     // NestjsFormDataModule.config({
     //   storage: FileSystemStoredFile,  // MemoryStoredFile || FileSystemStoredFile

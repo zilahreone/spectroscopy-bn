@@ -10,7 +10,7 @@ import { CategoryModule } from '../category/category.module';
   providers: [TechniqueService],
   imports: [
     TypeOrmModule.forFeature([Technique]),
-    CategoryModule
+    // CategoryModule
   ],
   exports: [TechniqueService]
 })

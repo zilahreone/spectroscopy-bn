@@ -3,6 +3,7 @@ import { SampleService } from './sample.service';
 import { CreateSampleDto } from './dto/create-sample.dto';
 import { UpdateSampleDto } from './dto/update-sample.dto';
 import { FormDataRequest } from 'nestjs-form-data';
+import { isUUID } from 'class-validator';
 
 @Controller('sample')
 export class SampleController {
@@ -21,17 +22,17 @@ export class SampleController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.sampleService.findOne(id);
+    return this.sampleService.findOne(isUUID(id) ? {id} : {name: id});
   }
 
   @Patch(':id')
   @FormDataRequest()
   update(@Param('id') id: string, @Body() updateSampleDto: UpdateSampleDto) {
-    return this.sampleService.update(id, updateSampleDto);
+    return this.sampleService.update(isUUID(id) ? {id} : {name: id}, updateSampleDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.sampleService.remove(id);
+    return this.sampleService.remove(isUUID(id) ? {id} : {name: id});
   }
 }

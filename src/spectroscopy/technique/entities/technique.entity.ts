@@ -1,7 +1,7 @@
-import { Category } from "src/spectroscopy/category/entities/category.entity";
+// import { Category } from "src/spectroscopy/category/entities/category.entity";
 import { Experiment } from "src/spectroscopy/experiment/entities/experiment.entity";
 import { Instrument } from "src/spectroscopy/instrument/entities/instrument.entity";
-import { Measurement } from "src/spectroscopy/measurement/entities/measurement.entity";
+// import { Measurement } from "src/spectroscopy/measurement/entities/measurement.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId, Unique } from "typeorm";
 
 @Entity()
@@ -31,7 +31,7 @@ export class Technique {
   @RelationId((technique: Technique) => technique.experiments)
   experimentsId: string[]
 
-  @ManyToOne(() => Category, (category: Category) => category.techniques)
-  category: Category;
+  // @OneToMany(() => Category, (category: Category) => category.technique)
+  // categorys: Category[];
 
 }

@@ -1,6 +1,7 @@
-import { Category } from "src/spectroscopy/category/entities/category.entity";
+// import { Category } from "src/spectroscopy/category/entities/category.entity";
+// import { Form } from "src/spectroscopy/form/entities/form.entity";
 import { Sample } from "src/spectroscopy/sample/entities/sample.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, RelationId, Unique } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId, Unique } from "typeorm";
 
 @Entity()
 @Unique(['name'])
@@ -20,6 +21,9 @@ export class Chemical {
   // @RelationId((chemical: Chemical) => chemical.samples)
   // samplesId: string[]
 
-  @OneToMany(() => Category, (category: Category) => category.chemical)
-  categorys: Category[];
+  // @OneToMany(() => Category, (category: Category) => category.chemical)
+  // categorys: Category[];
+
+  // @ManyToOne(() => Form, (form: Form) => form.chemicals)
+  // form: Form;
 }

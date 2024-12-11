@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ChemicalService } from './chemical.service';
 import { CreateChemicalDto } from './dto/create-chemical.dto';
 import { UpdateChemicalDto } from './dto/update-chemical.dto';
+import { isUUID } from 'class-validator';
 
 @Controller('chemical')
 export class ChemicalController {
@@ -19,7 +20,8 @@ export class ChemicalController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.chemicalService.findOne(id);
+    // console.log(isUUID(id));
+    return this.chemicalService.findOne(isUUID(id) ? {id} : {name: id});
   }
 
   @Patch(':id')

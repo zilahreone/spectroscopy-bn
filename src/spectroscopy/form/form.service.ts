@@ -1,27 +1,26 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
-import { CreateOrganizationDto } from './dto/create-organization.dto';
-import { UpdateOrganizationDto } from './dto/update-organization.dto';
-import { Organization } from './entities/organization.entity';
+import { CreateFormDto } from './dto/create-form.dto';
+import { UpdateFormDto } from './dto/update-form.dto';
+import { Form } from './entities/form.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class OrganizationService {
+export class FormService {
   constructor(
-    @InjectRepository(Organization)
-    private readonly repository: Repository<Organization>,
+    @InjectRepository(Form)
+    private readonly repository: Repository<Form>,
   ) { }
-
-  async create(createOrganizationDto: CreateOrganizationDto) {
+  async create(createFormDto: CreateFormDto) {
     try {
-      return await this.repository.save(createOrganizationDto)
+      return await this.repository.save(createFormDto)
     } catch (error) {
       throw new NotImplementedException(`${error}`)
     }
   }
 
   async findAll() {
-    return await this.repository.find({ relations: { users: true, experiments: true, samples: true } });
+    return await this.repository.find({ relations: {} })
   }
 
   async findOne(id: { name: string } | { id: string}) {
@@ -32,10 +31,10 @@ export class OrganizationService {
     }
   }
 
-  async update(id: string, updateOrganizationDto: UpdateOrganizationDto) {
+  async update(id: string, updateFormDto: UpdateFormDto) {
     await this.findOne({id});
     try {
-      return await this.repository.update(id, updateOrganizationDto);
+      return await this.repository.update(id, updateFormDto);
     } catch (error) {
       throw new NotImplementedException(`${error}`);
     }
@@ -44,7 +43,6 @@ export class OrganizationService {
   async remove(id: string) {
     await this.findOne({id});
     try {
-      console.log();  
       return await this.repository.delete({ id })
     } catch (error) {
       throw new NotImplementedException(`${error}`);

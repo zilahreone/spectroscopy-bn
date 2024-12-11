@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { OrganizationService } from './organization.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { isUUID } from 'class-validator';
 
 @Controller('organization')
 export class OrganizationController {
@@ -19,7 +20,7 @@ export class OrganizationController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.organizationService.findOne(id);
+    return this.organizationService.findOne(isUUID(id) ? {id} : {name: id});
   }
 
   @Patch(':id')

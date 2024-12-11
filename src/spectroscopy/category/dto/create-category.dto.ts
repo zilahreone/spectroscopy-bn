@@ -6,9 +6,6 @@ export class CreateCategoryDto {
   
   @IsOptional()
   description: string;
-  
-  @IsNotEmpty()
-  chemicalId: string;
 }
 
 export class AdditionalCreateCategoryInfo {

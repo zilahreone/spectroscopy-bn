@@ -3,7 +3,7 @@ import { IsDefined, IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 export class CreateChemicalDto {
   @IsNotEmpty()
   name: string;
-
+  
   @IsOptional()
   description: string;
 }

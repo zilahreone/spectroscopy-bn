@@ -1,0 +1,214 @@
+"Glucose"
+"Fructose"
+"D-Xylose"
+"L-Xylose"
+"Arabinose"
+"Sorbitol"
+"Xylitol"
+"FDCA"
+"Glycolic acid"
+"Citric acid"
+"Succinic acid"
+"Isosorbide"
+"5-HMF"
+"Acetic acid"
+------------- TDS
+Glucose
+Fructose
+D-Xylose
+L-Xylose
+Arabinose
+Sorbitol
+Xylitol
+FDCA
+Glycolic acid
+Citric acid
+Succinic acid
+Isosorbide
+Furfural
+Furfuryl alcohol
+5-HMF
+Levulinic acid
+r-Valerolactone
+D-Lactic acid
+L-Lactic acid
+Formic acid
+Acetic acid
+Lactic acid
+-------------------- FTIR
+Glucose
+Glucose
+Fructose
+Fructose
+D-Xylose
+D-Xylose
+L-Xylose
+L-Xylose
+Arabinose
+Arabinose
+Sorbitol
+Sorbitol
+Xylitol
+Xylitol
+FDCA
+FDCA
+Glycolic acid
+Glycolic acid
+Citric acid
+Citric acid
+Succinic acid
+Succinic acid
+Isosorbide
+Isosorbide
+Furfural
+Furfural
+Furfuryl alcohol
+Furfuryl alcohol
+5-HMF
+5-HMF
+Levulinic acid
+Levulinic acid
+r-Valerolactone
+r-Valerolactone
+D-Lactic acid
+D-Lactic acid
+L-Lactic acid
+L-Lactic acid
+Formic acid
+Formic acid
+Acetic acid
+Acetic acid
+Lactic acid
+Lactic acid
+----------------- RAMAN
+========================================= Biorefinery
+
+4-MBA
+4-MBA
+4-MBA
+Crystal violet
+R6G
+Citric Acid
+R6G (1×10-5 M)
+------------------------------- Indicator
+CBD (100 PPM)
+CBN (100 PPM)
+THC (100 PPM)
+THC (10 PPM)
+CBN (1 PPM)
+CBN (1 PPM)
+CBN (0.5 PPM)
+CBN (0.5 PPM)
+CBN (0.5 PPM)
+CBN (0.25 PPM)
+CBN (0.25 PPM)
+---------------------------- Forensic
+Paraquat (1×10-1 M)
+Paraquat (1×10-2 M)
+Paraquat (1×10-3 M)
+Paraquat (1×10-4 M)
+Paraquat (1×10-4 M)
+Paraquat (1×10-5 M)
+Paraquat (1×10-6 M)
+Paraquat (1×10-7 M)
+Paraquat (1×10-8 M)
+Cypermethrin (1×10-1 M)
+Cypermethrin (1×10-2 M)
+Cypermethrin (1×10-3 M)
+Cypermethrin (1×10-4 M)
+Cypermethrin (1×10-4 M)
+Cypermethrin (1×10-5 M)
+Cypermethrin (1×10-6 M)
+Cypermethrin (1×10-7 M)
+Carbaryl (1×10-1 M)
+Carbaryl (1×10-2 M)
+Carbaryl (1×10-3 M)
+Carbaryl (1×10-4 M)
+Carbaryl (1×10-4 M)
+Carbaryl (1×10-5 M)
+Carbaryl (1×10-6 M)
+Carbaryl (1×10-7 M)
+Chlorpyrifos
+Chlorpyrifos (1×10-1 M)
+Chlorpyrifos (1×10-2 M)
+Chlorpyrifos (1×10-3 M)
+Chlorpyrifos (1×10-4 M)
+Chlorpyrifos (1×10-2 M)
+Chlorpyrifos (1×10-3 M)
+Chlorpyrifos (1×10-4 M)
+Chlorpyrifos (1×10-5 M)
+Methyl Parathion
+Methyl Parathion
+Methyl Parathion
+Chlorpyrifos
+Paraqaut
+Glyphosate
+Paraquat (1×10-4 M)
+Paraquat (1×10-6 M)
+Paraquat (1×10-8 M)
+Paraquat (5×10-7 M)
+Paraquat (2.5×10-7 M)
+Formalin 1000 ug/l
+----------------------------------- Pesticide
+Enrofloxacin
+Enrofloxacin
+Norfloxacin
+Norfloxacin
+Pefloxacin
+Pefloxacin
+Sulfamethoxazole
+Sulfamethoxazole
+Oxytetracycline
+---------------------------- Antibiotic
+Uric acid
+Calcium oxalate
+Calcium phosphate
+Uric acid
+Calcium oxalate
+Uric acid
+Calcium phosphate
+Dengue fever/DF
+Dengue fever/DF
+Dengue fever/DF
+Dengue fever/DF
+Dengue hemorrhagic fever/DHF
+Dengue hemorrhagic fever/DHF
+Dengue hemorrhagic fever/DHF
+Dengue hemorrhagic fever/DHF
+Paracetamol
+Diclofenac
+Diclofenac
+Diclofenac
+Diclofenac
+Diclofenac
+Ibuprofen
+Ibuprofen
+Ibuprofen
+Ibuprofen
+Ibuprofen
+Ibuprofen
+Paracetamol
+Paracetamol
+Paracetamol
+Paracetamol
+---------------------------- Medical
+Graphene/Si
+Graphene/Cu 
+Graphene/Ni
+Graphene/SOG
+Polyimide 
+Polyimide
+PDMS
+PDMS
+Boron
+Natural rubber
+GO
+rGO
+Mxene
+Antimony 
+Antimony 
+Graphene
+rGO
+Plastic PE
+Silicon wafer
+----------------------- Material

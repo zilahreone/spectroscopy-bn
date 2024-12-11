@@ -4,49 +4,52 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ChemicalService } from '../chemical/chemical.service';
+// import { ChemicalService } from '../chemical/chemical.service';
+// import { TechniqueService } from '../technique/technique.service';
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private readonly repository: Repository<Category>,
-    private readonly chemicalService: ChemicalService
+    // private readonly chemicalService: ChemicalService,
+    // private readonly techniqueService: TechniqueService
   ) { }
   async create(createCategoryDto: CreateCategoryDto) {
-    const chemical = await this.chemicalService.findOne(createCategoryDto.chemicalId)
+    // const chemical = await this.chemicalService.findOne({id: createCategoryDto.chemicalId})
+    // const technique = await this.techniqueService.findOne(createCategoryDto.techniqueId)
     try {
-      return await this.repository.save({...createCategoryDto, chemical})
+      return await this.repository.save({...createCategoryDto})
     } catch (error) {
       throw new NotImplementedException(`${error}`)
     }
   }
 
   async findAll() {
-    return await this.repository.find({ relations: { } })
+    return await this.repository.find({ relations: { samples: true } })
   }
 
-  async findOne(id: string) {
+  async findOne(id: { name: string } | { id: string}) {
     try {
-      return await this.repository.findOneByOrFail({ name: id });
+      return await this.repository.findOneByOrFail(id);
     } catch (error) {
       throw new NotFoundException(`${error}`);
     }
   }
 
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
-    await this.findOne(id);
+    await this.findOne({id});
+    // const chemical = await this.chemicalService.findOne({id: updateCategoryDto.chemicalId})
     try {
-      return await this.repository.update(id, updateCategoryDto);
+      return await this.repository.update(id, {...updateCategoryDto});
     } catch (error) {
       throw new NotImplementedException(`${error}`);
     }
   }
 
   async remove(id: string) {
-    await this.findOne(id);
+    await this.findOne({id});
     try {
-      console.log();
       return await this.repository.delete({ id })
     } catch (error) {
       throw new NotImplementedException(`${error}`);

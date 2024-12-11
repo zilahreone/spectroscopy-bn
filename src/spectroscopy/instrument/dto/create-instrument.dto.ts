@@ -7,9 +7,11 @@ export class CreateInstrumentDto {
   @IsOptional()
   description: string;
 
+  @IsUUID(4)
   @IsNotEmpty()
   techniqueId: string;
   
+  @IsUUID(4)
   @IsNotEmpty()
   equipmentTypeId: string;
 }

@@ -1,21 +1,14 @@
 import { IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 
-export class CreateTechniqueDto {
+export class CreateFormDto {
   @IsNotEmpty()
   name: string;
-  
+
   @IsOptional()
   description: string;
-  
-  @IsUUID(4)
-  @IsNotEmpty()
-  categoryId: string;
-  
-  @IsNotEmpty()
-  categoryName: string;
 }
 
-export class AdditionalTechniqueInfo {
+export class AdditionalFormInfo {
   @IsUUID(4)
   @IsNotEmpty()
   id: string;

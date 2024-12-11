@@ -27,8 +27,8 @@ export class ExperimentService {
     const technique = await this.techniqueService.findOne(createExperimentDto.techniqueId);
     const measurement = await this.measurementService.findOne(createExperimentDto.measurementId);
     const user = await this.userService.findOne(createExperimentDto.userId);
-    const organization = await this.organizationService.findOne(createExperimentDto.organizationId);
-    const sample = await this.sampleService.findOne(createExperimentDto.sampleId);
+    const organization = await this.organizationService.findOne({id: createExperimentDto.organizationId});
+    const sample = await this.sampleService.findOne({id: createExperimentDto.sampleId});
     const instrument = await this.instrumentService.findOne(createExperimentDto.instrumentId);
     try {
       return await this.repository.save({...createExperimentDto, technique, measurement, user, organization, sample, instrument})

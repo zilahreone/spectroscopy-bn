@@ -3,6 +3,7 @@ import { Experiment } from "src/spectroscopy/experiment/entities/experiment.enti
 import { Chemical } from "src/spectroscopy/chemical/entities/chemical.entity";
 import { Organization } from "src/spectroscopy/organization/entities/organization.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId, Unique, UpdateDateColumn } from "typeorm";
+import { Form } from "src/spectroscopy/form/entities/form.entity";
 
 @Entity()
 @Unique(['name'])
@@ -13,16 +14,13 @@ export class Sample {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
-
-  @Column()
-  form: string;
   
-  @Column()
+  @Column({ nullable: true })
   source: string;
   
-  @Column()
+  @Column({ nullable: true })
   note: string;
 
   @Column('json')
@@ -47,21 +45,24 @@ export class Sample {
   @OneToMany(() => Experiment, (experiment: Experiment) => experiment.sample)
   experiments: Experiment[];
 
-  @RelationId((sample: Sample) => sample.experiments)
-  experimentsId: string[]
+  // @RelationId((sample: Sample) => sample.experiments)
+  // experimentsId: string[]
 
-  // @ManyToOne(() => Category, (category: Category) => category.samples)
-  // category: Category;
+  @ManyToOne(() => Category, (category: Category) => category.samples)
+  category: Category;
 
   // @RelationId((sample: Sample) => sample.category) // you need to specify target relation
   // categoryId: string
+
+  @ManyToOne(() => Form, (form: Form) => form.samples)
+  form: Form
   
   @ManyToOne(() => Organization, (organization: Organization) => organization.samples)
   organization: Organization;
 
-  @RelationId((sample: Sample) => sample.organization) // you need to specify target relation
-  @Column()
-  organizationId: string
+  // @RelationId((sample: Sample) => sample.organization) // you need to specify target relation
+  // @Column()
+  // organizationId: string
   
 }
 

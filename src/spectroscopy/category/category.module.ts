@@ -4,13 +4,15 @@ import { CategoryController } from './category.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { ChemicalModule } from '../chemical/chemical.module';
+import { TechniqueModule } from '../technique/technique.module';
 
 @Module({
   controllers: [CategoryController],
   providers: [CategoryService],
   imports: [
     TypeOrmModule.forFeature([Category]),
-    ChemicalModule
+    // ChemicalModule,
+    // TechniqueModule
   ],
   exports: [
     CategoryService

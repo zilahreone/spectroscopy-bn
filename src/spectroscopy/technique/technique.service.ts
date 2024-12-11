@@ -4,19 +4,19 @@ import { UpdateTechniqueDto } from './dto/update-technique.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Technique } from './entities/technique.entity';
 import { Repository } from 'typeorm';
-import { CategoryService } from '../category/category.service';
+// import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class TechniqueService {
   constructor(
     @InjectRepository(Technique)
     private readonly repository: Repository<Technique>,
-    private readonly categoryService: CategoryService,
+    // private readonly categoryService: CategoryService,
   ) { }
   async create(createTechniqueDto: CreateTechniqueDto) {
-    const category = await this.categoryService.findOne(createTechniqueDto.categoryName)
+    // const category = await this.categoryService.findOne(createTechniqueDto.categoryName)
     try {
-      return await this.repository.save({...createTechniqueDto, category})
+      return await this.repository.save({...createTechniqueDto})
     } catch (error) {
       throw new NotImplementedException(`${error}`)
     }
