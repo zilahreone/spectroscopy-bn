@@ -26,7 +26,7 @@ export class OrganizationService {
 
   async findOne(id: { name: string } | { id: string}) {
     try {
-      return await this.repository.findOneByOrFail(id);
+      return await this.repository.findOneOrFail({ where: id, relations: { users: true } });
     } catch (error) {
       throw new NotFoundException(`${error}`);
     }
@@ -44,7 +44,6 @@ export class OrganizationService {
   async remove(id: string) {
     await this.findOne({id});
     try {
-      console.log();  
       return await this.repository.delete({ id })
     } catch (error) {
       throw new NotImplementedException(`${error}`);

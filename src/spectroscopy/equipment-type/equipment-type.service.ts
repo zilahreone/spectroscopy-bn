@@ -20,7 +20,7 @@ export class EquipmentTypeService {
   }
 
   async findAll() {
-    return await this.repository.find({ relations: { instruments: true } })
+    return await this.repository.find({ relations: { instruments: { technique: { experiments: true } } } })
   }
 
   async findOne(id: string) {

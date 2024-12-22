@@ -4,6 +4,7 @@ import { IsDefined, IsNotEmpty, IsNotEmptyObject, IsNumber, IsOptional, IsUUID, 
 import { FileSystemStoredFile, HasMimeType, IsFiles, MaxFileSize } from "nestjs-form-data";
 
 function checkUnicode(files: FileSystemStoredFile[]): FileSystemStoredFile[] {
+  // console.log(files);
   let attachments = files
   attachments.forEach(file => {
     if (!/[^\u0000-\u00ff]/.test(file?.originalName)) {
@@ -32,41 +33,67 @@ class Files {
   fileExt: string
 }
 
-class MeasurementCondition {
+export class MeasurementCondition {
   @IsNumber()
+  @Transform(({ value }) => parseInt(value))
   @IsNotEmpty()
   accumulations: number;
 
-  @ValidateIf((measurement: Data) => ['tds', 'raman'].includes(measurement.experimentName))
-  wavelength: string;
-
-  @ValidateIf((measurement: Data) => measurement.experimentName === 'ftir')
-  source: string;
-
-  @ValidateIf((measurement: Data) => measurement.experimentName === 'ftir')
-  beamSplitter: string;
-
-  @ValidateIf((measurement: Data) => measurement.experimentName === 'ftir')
-  detector: string;
-
-  @ValidateIf((measurement: Data) => measurement.experimentName === 'raman')
-  laserPower: string;
-
-  @ValidateIf((measurement: Data) => measurement.experimentName === 'raman')
-  exposureTime: string;
-
-  @ValidateIf((measurement: Data) => measurement.experimentName === 'raman')
-  lens: string;
 }
 
+class TDSCondition extends MeasurementCondition {
+  @IsNotEmpty()
+  @ValidateIf((_, val) => !new RegExp(/^[1-9]\d*nm$/g).test(val))
+  waveLength: string;
+}
+
+class FTIRCondition extends MeasurementCondition {
+  @IsNotEmpty()
+  source: string;
+
+  @IsNotEmpty()
+  beamSplitter: string;
+
+  @IsNotEmpty()
+  detector: string;
+}
+
+class RamanCondition extends MeasurementCondition {
+
+  // @IsNumber()
+  // @IsNotEmpty()
+  // accumulations: number;
+  
+  @IsNotEmpty()
+  @ValidateIf((_, val) => !new RegExp(/^[1-9]\d*nm$/g).test(val))
+  waveLength: string;
+
+  @IsNotEmpty()
+  @ValidateIf((_, val) => !new RegExp(/^[1-9]\d*%$/g).test(val))
+  laserPower: string;
+
+  @IsNotEmpty()
+  @ValidateIf((_, val) => !new RegExp(/^[1-9]\d*s$/g).test(val))
+  exposureTime: string;
+
+  @IsNotEmpty()
+  @ValidateIf((_, val) => !new RegExp(/^[1-9]\d*x$/g).test(val))
+  lens: string;
+
+}
+
+
 class MeasurementTechniqueSERS {
-  @IsNotEmpty()
+  @IsOptional()
   chip: string;
-  @IsNotEmpty()
+
+  @IsOptional()
   nanoparticles: string;
-  @IsNotEmpty()
+
+  @IsOptional()
   papers: string;
-  @IsNotEmpty()
+
+  @IsOptional()
   other: string;
 }
 
@@ -77,58 +104,97 @@ class MeasurementTechnique {
   sers: MeasurementTechniqueSERS
 }
 
-class Data {
+export class Data {
   @IsNotEmpty()
   name: string;
+
+  @IsUUID(4)
+  @IsNotEmpty()
+  experimentId: string;
 
   @IsNotEmpty()
   experimentName: string;
 
+  @IsUUID(4)
   @IsNotEmpty()
-  instrument: string;
+  instrumentId: string;
+
+  @IsNotEmpty()
+  instrumentName: string;
 
   @IsOptional()
   spectrumDescription: string;
 
-  @ValidateIf((measurement: Data) => measurement.experimentName === 'tds')
+  @IsOptional()
+  remark: string;
+
+  @IsNotEmpty()
+  techniqueName: string;
+
+  @IsNotEmpty()
+  @ValidateIf((measurement: Data) => measurement.techniqueName === 'tds')
   binder: string;
 
+  @Type((val) => {
+    const { techniqueName } = val.newObject
+
+    switch (techniqueName) {
+      case 'raman':
+        return RamanCondition;
+      case 'ftir':
+        return FTIRCondition;
+      case 'tds':
+        return TDSCondition;
+      default:
+        break;
+    }
+  })
   @ValidateNested()
-  @Type(() => MeasurementCondition)
   @IsNotEmptyObject()
-  measurementCondition: MeasurementCondition;
+  measurementCondition: RamanCondition | FTIRCondition | TDSCondition;
 
   @ValidateNested()
-  @Type(() => MeasurementTechnique)
-  @ValidateIf((measurement: Data) => ['ftir', 'raman'].includes(measurement.experimentName))
+  @Type((val) => {
+    const { techniqueName } = val.newObject
+    switch (techniqueName) {
+      case 'raman':
+        return MeasurementTechnique
+      default:
+        break;
+    }
+  })
+  @IsNotEmpty()
+  @ValidateIf((measurement: Data) => ['ftir', 'raman'].includes(measurement.techniqueName))
   measurementTechnique: string | MeasurementTechnique;
 
-  @ValidateIf((measurement: Data) => measurement.experimentName === 'ftir')
+  @IsNotEmpty()
+  @ValidateIf((measurement: Data) => measurement.techniqueName === 'ftir')
   measurementRange: string;
 
-  @ValidateIf((measurement: Data) => measurement.experimentName === 'raman')
+  @IsNotEmpty()
+  @ValidateIf((measurement: Data) => measurement.techniqueName === 'raman')
   typeData: string;
 
-  @ValidateNested()
   @Type(() => Files)
-  @IsOptional()
-  files: Files[]
+  @IsNotEmptyObject()
+  attachment: Files
+
 }
 
 export class FileDto {
   @IsFiles()
-  @MaxFileSize(7 * 1024 * 1024, { message: 'Maximum file size is 7 MB' })
-  @HasMimeType(['application/pdf', 'text/plain'])
+  @MaxFileSize(7 * 1024 * 1024, { message: 'Maximum file size is 7 MB', each: true })
+  @HasMimeType('text/plain', { each: true })
   @Transform(({ value }: { value: FileSystemStoredFile[] }) => checkUnicode(value))
-  @IsOptional()
-  attachments: FileSystemStoredFile;
+  @IsNotEmpty()
+  attachment: FileSystemStoredFile;
 }
 
 class CreateDataDto {
   @ValidateNested()
   @Transform(({ value }) => plainToClass(Data, JSON.parse(value)))
   @Type(() => Data)
-  @IsDefined()
+  @IsNotEmpty()
   data: Data
 }
 
@@ -141,13 +207,13 @@ export class AdditionalMeasurementInfo {
 class UpdateData extends IntersectionType(
   Data,
   AdditionalMeasurementInfo
-) {}
+) { }
 
 export class UpdateDataDto {
   @ValidateNested()
   @Transform(({ value }) => plainToClass(UpdateData, JSON.parse(value)))
   @Type(() => UpdateData)
-  @IsDefined()
+  @IsNotEmpty()
   data: UpdateData
 }
 

@@ -3,8 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import { ExperimentsModule } from './spectroscopy/experiments/experiments.module';
-// import { Experiment } from './spectroscopy/experiments/entities/experiment.entity';
 import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
@@ -46,19 +44,18 @@ import { EquipmentTypeModule } from './spectroscopy/equipment-type/equipment-typ
       envFilePath: '.env',
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
-    // ExperimentsModule,
     // AuthModule,
-    DownloadModule,
-    UserModule,
+    ChemicalModule,
+    CategoryModule,
     OrganizationModule,
+    UserModule,
+    DownloadModule,
     MeasurementModule,
     TechniqueModule,
-    CategoryModule,
-    SampleModule,
-    ExperimentModule,
-    ChemicalModule,
     InstrumentModule,
     EquipmentTypeModule,
+    SampleModule,
+    ExperimentModule,
     // FormModule,
     // ServeStaticModule.forRoot({
     // resolve`('./uploads/test/test/')
@@ -66,6 +63,7 @@ import { EquipmentTypeModule } from './spectroscopy/equipment-type/equipment-typ
     // rootPath: join(__dirname, '..', 'uploads'),
     // serveRoot: 'uploads',
     // }),
-  ]
+  ],
+  exports: [AppService]
 })
 export class AppModule { }

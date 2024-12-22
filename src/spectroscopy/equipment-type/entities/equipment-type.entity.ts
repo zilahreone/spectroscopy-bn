@@ -1,3 +1,4 @@
+import { Experiment } from "src/spectroscopy/experiment/entities/experiment.entity";
 import { Instrument } from "src/spectroscopy/instrument/entities/instrument.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, RelationId, Unique } from "typeorm";
 
@@ -16,7 +17,9 @@ export class EquipmentType {
   @OneToMany(() => Instrument, (instrument: Instrument) => instrument.equipmentType)
   instruments: Instrument[];
 
-  @RelationId((equipmentType: EquipmentType) => equipmentType.instruments)
-  instrumentsId: string[];
+  // @RelationId((equipmentType: EquipmentType) => equipmentType.instruments)
+  // instrumentsId: string[];
 
+  @OneToMany(() => Experiment, (experiment: Experiment) => experiment.equipmentType)
+  experiments: Experiment[]
 }

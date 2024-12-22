@@ -1,53 +1,74 @@
-import { IsDefined, IsNotEmpty, IsUUID } from "class-validator";
+import { IntersectionType } from "@nestjs/swagger";
+import { plainToClass, Transform, Type } from "class-transformer";
+import { IsDefined, IsNotEmpty, IsUUID, ValidateNested } from "class-validator";
 
-export class CreateExperimentDto {
-  @IsDefined()
-  name: string;
-
-  @IsDefined()
-  chemicalName: string;
-  
-  @IsDefined()
-  chemicalId: string;
-
-  @IsDefined()
-  instrumentName: string;
-  
-  @IsDefined()
-  instrumentId: string;
-
-  @IsUUID(4)
+class Data {
   @IsNotEmpty()
-  userId: string;
-
+  name: string;
+  
+  @IsNotEmpty()
+  sampleName: string;
+  
   @IsUUID(4)
   @IsNotEmpty()
   sampleId: string;
-
+  
+  @IsNotEmpty()
+  instrumentName: string;
+  
+  @IsUUID(4)
+  @IsNotEmpty()
+  instrumentId: string;
+  
+  @IsUUID(4)
+  @IsNotEmpty()
+  userId: string;
+  
   @IsUUID(4)
   @IsNotEmpty()
   organizationId: string;
   
   @IsNotEmpty()
   organizationName: string;
-
+  
   @IsUUID(4)
   @IsNotEmpty()
   techniqueId: string;
- 
-  @IsNotEmpty()
-  techniqueName: string;
-
-  @IsUUID(4)
-  @IsNotEmpty()
-  measurementId: string;
   
   @IsNotEmpty()
-  measurementName: string;
-
+  techniqueName: string;
+  
+  @IsUUID(4)
+  @IsNotEmpty()
+  equipmentId: string;
+  
+  @IsNotEmpty()
+  equipmentName: string;
 }
 
 export class AdditionalExperimentInfo {
+  @IsUUID(4)
   @IsNotEmpty()
   id: string;
+}
+
+export class UpdateData extends IntersectionType(
+  Data,
+  AdditionalExperimentInfo
+) {}
+
+export class CreateExperimentDto {
+  @ValidateNested()
+  @Transform(({ value }) => plainToClass(Data, JSON.parse(value)))
+  @Type(() => Data)
+  @IsDefined()
+  data: Data
+}
+
+export class UpdateDataExperimentDto {
+  @ValidateNested()
+  @Transform(({ value }) => plainToClass(UpdateData, JSON.parse(value)))
+  @Type(() => UpdateData)
+  @IsDefined()
+  data: UpdateData
 }

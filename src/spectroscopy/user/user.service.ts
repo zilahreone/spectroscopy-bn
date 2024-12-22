@@ -18,8 +18,14 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     const organization = await this.organizationService.findOne({id: createUserDto.organizationId})
+    // console.log(organization);
+    
+    // console.log(new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(createUserDto.email));
+    
+    // if (!organization) {
+    // }
     try {
-      return await this.repository.insert({...createUserDto, organization: organization})
+      return await this.repository.save({...createUserDto, organization: organization})
     } catch (err) {
       throw new NotImplementedException(`${err}`)
     }
@@ -41,21 +47,23 @@ export class UserService {
   }
 
   async findOne(id: string) {
+    // console.log(id);
     try {
-      return await this.repository.findOneBy({ id });
+      return await this.repository.findOneOrFail({ where: { id }, relations: { downloads: true, organization: true } });
     } catch (err) {
       throw new NotFoundException(`${err}`);
     }
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    await this.findOne(id);
-    try {
-      return await this.repository.update(id, updateUserDto);
-    } catch (err) {
-      throw new NotImplementedException(`${err}`);
-    }
-  }
+  // async update(id: string, updateUserDto: UpdateUserDto) {
+  //   await this.findOne(id);
+  //   const organization = await this.organizationService.findOne({id: updateUserDto.organizationId})
+  //   try {
+  //     return await this.repository.update(id, {...updateUserDto, organization});
+  //   } catch (err) {
+  //     throw new NotImplementedException(`${err}`);
+  //   }
+  // }
 
   async remove(id: string) {
     await this.findOne(id);

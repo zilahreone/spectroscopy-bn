@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { Injectable, NotFoundException, NotImplementedException, StreamableFile } from '@nestjs/common';
 import { CreateSampleDto } from './dto/create-sample.dto';
 import { UpdateSampleDto } from './dto/update-sample.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,8 +9,8 @@ import { CategoryService } from '../category/category.service';
 import { OrganizationService } from '../organization/organization.service';
 import { FormService } from '../form/form.service';
 import { FileSystemStoredFile } from 'nestjs-form-data';
-import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
-import { basename, extname } from 'path';
+import { createReadStream, existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
+import { basename, extname, join } from 'path';
 import { randomUUID, sign } from 'crypto';
 
 @Injectable()
@@ -64,6 +64,26 @@ export class SampleService {
     const organization = await this.organizationService.findOne({ id: createSampleDto.data.organizationId })
     const form = await this.formService.findOne({ id: createSampleDto.data.formId })
     try {
+      const imagesDto = createSampleDto.images as unknown as FileSystemStoredFile[] || []
+      const attachmentsDto = createSampleDto.attachments as unknown as FileSystemStoredFile[] || []
+      
+      // SAVE FILES
+      imagesDto?.forEach((image, index) => {
+        const originalName = image.originalName
+        this.saveFile(image)
+        createSampleDto.data.images.splice(
+          createSampleDto.data.images.findIndex(dataImage => dataImage.name === originalName), 1,
+          { name: image.originalName, size: image.size, mimeType: image.mimeType, fileExt: image.extension }
+        )
+      })
+      attachmentsDto?.forEach((attach, index) => {
+        const originalName = attach.originalName
+        this.saveFile(attach)
+        createSampleDto.data.attachments.splice(
+          createSampleDto.data.attachments.findIndex(dataAttach => dataAttach.name === originalName), 1,
+          { name: attach.originalName, size: attach.size, mimeType: attach.mimeType, fileExt: attach.extension }
+        )
+      })
       return await this.repository.save({ ...createSampleDto.data, chemical: chemical, category: category, organization: organization, form: form })
     } catch (error) {
       throw new NotImplementedException(`${error}`)
@@ -71,7 +91,7 @@ export class SampleService {
   }
 
   async findAll() {
-    return await this.repository.find({ relations: { experiments: true, chemical: true, form: true, category: true, organization: true } })
+    return await this.repository.find({ relations: { chemical: true, form: true, category: true, organization: true } })
   }
 
   async findOne(id: { name: string } | { id: string }) {
@@ -92,12 +112,7 @@ export class SampleService {
       const imagesDto = updateSampleDto.images as unknown as FileSystemStoredFile[] || []
       const attachmentsDto = updateSampleDto.attachments as unknown as FileSystemStoredFile[] || []
 
-      // console.log(find);
-
-      // SAVE FILES
-      imagesDto?.forEach((image, index) => {
-        this.saveFile(image)
-      })
+      // console.log(updateSampleDto.data.images);
 
       // COMPARE FILE NAME AND DELETE FILES
       find.images.forEach((image, index) => {
@@ -105,37 +120,43 @@ export class SampleService {
           this.deleteFile(image)
         }
       })
+      find.attachments.forEach((attach, index) => {
+        if (updateSampleDto.data.attachments.findIndex(updateImage => updateImage.name === attach.name) < 0) {
+          this.deleteFile(attach)
+        }
+      })
 
-      const images = imagesDto.length > 0
-        ? [...find.images, ...imagesDto?.map((image) => ({ name: image.originalName, size: image.size, mimeType: image.mimeType, fileExt: image.extension }))]
-        : find.images.filter(image => !image['deleted'])
-
-      // const images = () => {
-      //   let images = imagesDto?.map((image) => ({ name: image.originalName, size: image.size, mimeType: image.mimeType, fileExt: image.extension }))
-      //   images.concat(find.images.filter(image => !image['deleted']))
-      //   return images
-      // }
-
-      // console.log(images());
-      
-      // imagesDto?.map((image) => ({ name: image.originalName, size: image.size, mimeType: image.mimeType, fileExt: image.extension })).concat(find.images)
-      // const attachments = attachmentsDto?.map((image) => ({ name: image.originalName, size: image.size, mimeType: image.mimeType, fileExt: image.extension }))
+      // SAVE FILES
+      imagesDto?.forEach((image, index) => {
+        const originalName = image.originalName
+        this.saveFile(image)
+        updateSampleDto.data.images.splice(
+          updateSampleDto.data.images.findIndex(dataImage => dataImage.name === originalName), 1,
+          { name: image.originalName, size: image.size, mimeType: image.mimeType, fileExt: image.extension }
+        )
+      })
+      attachmentsDto?.forEach((attach, index) => {
+        const originalName = attach.originalName
+        this.saveFile(attach)
+        updateSampleDto.data.attachments.splice(
+          updateSampleDto.data.attachments.findIndex(dataAttach => dataAttach.name === originalName), 1,
+          { name: attach.originalName, size: attach.size, mimeType: attach.mimeType, fileExt: attach.extension }
+        )
+      })
 
       const update = Object.keys(find).reduce((prev, curr) => {
-        if (!['images', 'attachments', 'createAt', 'updateAt', 'chemical', 'category', 'organization', 'form'].includes(curr)) {
+        if (!['createAt', 'updateAt', 'chemical', 'category', 'organization', 'form'].includes(curr)) {
           prev[curr] = updateSampleDto.data[curr]
         }
         return prev
       }, {
-        images,
-        // attachments,
         chemical,
         category,
         organization,
         form
       })
 
-      console.log(update);
+      // console.log(update);
 
       return await this.repository.update(id, update)
     } catch (error) {
@@ -150,5 +171,22 @@ export class SampleService {
     } catch (error) {
       throw new NotImplementedException(`${error}`);
     }
+  }
+
+  async streamFile(id: { name: string } | { id: string }, filename: string) {
+    const imagesDir: string = process.env.IMAGES_DIR
+    const attachmentsDir: string = process.env.ATTACHMENTS_DIR
+
+    const find = await this.findOne(id)
+    const filter = find.images.concat(find.attachments).filter(file => file.name === filename)[0]
+    console.log((filter));
+    // return find
+    const file = createReadStream(join(process.cwd(), `${filter.mimeType.includes('image') ? imagesDir : attachmentsDir}/${filename}`));
+    return new StreamableFile(file, {
+      type: filter.mimeType,
+      // disposition: 'attachment; filename="package.json"',
+      // If you want to define the Content-Length value to another value instead of file's length:
+      // length: 123,
+    })
   }
 }

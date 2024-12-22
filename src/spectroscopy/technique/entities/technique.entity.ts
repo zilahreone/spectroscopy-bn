@@ -19,8 +19,8 @@ export class Technique {
   @OneToMany(() => Instrument, (instrument: Instrument) => instrument.technique)
   instruments: Instrument[];
 
-  @RelationId((technique: Technique) => technique.instruments)
-  instrumentsId: string[];
+  // @RelationId((technique: Technique) => technique.instruments)
+  // instrumentsId: string[];
   
   // @ManyToOne(() => Measurement, (measurement: Measurement) => measurement.techniques)
   // measurement: Measurement;
@@ -28,8 +28,8 @@ export class Technique {
   @OneToMany(() => Experiment, (experiment: Experiment) => experiment.technique)
   experiments: Experiment[];
 
-  @RelationId((technique: Technique) => technique.experiments)
-  experimentsId: string[]
+  // @RelationId((technique: Technique) => technique.experiments)
+  // experimentsId: string[]
 
   // @OneToMany(() => Category, (category: Category) => category.technique)
   // categorys: Category[];

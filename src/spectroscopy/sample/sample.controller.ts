@@ -25,6 +25,13 @@ export class SampleController {
     return this.sampleService.findOne(isUUID(id) ? {id} : {name: id});
   }
 
+  @Get(':id/:filename')
+  findOneFilename(@Param() params: { id: string, filename: string }) {
+    const { id, filename } = params
+    return this.sampleService.streamFile(isUUID(id) ? {id} : {name: id}, filename)
+    // return this.sampleService.findOne(isUUID(id) ? {id} : {name: id});
+  }
+
   @Patch(':id')
   @FormDataRequest()
   update(@Param('id') id: string, @Body() updateSampleDto: UpdateSampleDto) {

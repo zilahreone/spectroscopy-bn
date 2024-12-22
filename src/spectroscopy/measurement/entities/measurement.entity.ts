@@ -1,10 +1,10 @@
 import { Download } from "src/spectroscopy/download/entities/download.entity";
 import { Experiment } from "src/spectroscopy/experiment/entities/experiment.entity";
 import { Technique } from "src/spectroscopy/technique/entities/technique.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId, Unique, UpdateDateColumn } from "typeorm";
 
 class MeasurementCondition {
-  @Column()
+  @Column('integer')
   accumulations: number
 
   @Column({ nullable: true })
@@ -30,16 +30,16 @@ class MeasurementCondition {
 }
 
 class MeasurementTechniqueSERS {
-  @Column()
+  @Column({ nullable: true })
   chip: string;
 
-  @Column()
+  @Column({ nullable: true })
   nanoparticles: string;
 
-  @Column()
+  @Column({ nullable: true })
   papers: string;
 
-  @Column()
+  @Column({ nullable: true })
   other: string;
 }
 
@@ -66,12 +66,19 @@ class File {
 }
 
 @Entity()
+@Unique(['name'])
 export class Measurement {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  name: string
+  name: string;
+
+  // @Column({ nullable: true })
+  // spectrumDescription: string
+
+  // @Column({ nullable: true })
+  // remark: string;
 
   @Column(() => MeasurementCondition)
   measurementCondition: MeasurementCondition;
@@ -85,20 +92,26 @@ export class Measurement {
   @Column({ nullable: true })
   typeData: string;
 
-  @Column('json', { nullable: true })
-  files: File[]
+  @Column(() => File)
+  attachment: File
+
+  // @CreateDateColumn({ name: 'create_at' })
+  // createAt: Date;
+
+  // @UpdateDateColumn({ nullable: true, name: 'update_at' })
+  // updateAt: Date;
 
   @OneToMany(() => Download, (download: Download) => download.measurement)
   downloads: Download[];
 
-  @RelationId((measurement: Measurement) => measurement.downloads) // you need to specify target relation
-  downloadsId: string[]
+  // @RelationId((measurement: Measurement) => measurement.downloads) // you need to specify target relation
+  // downloadsId: string[]
 
-  @OneToMany(() => Experiment, (experiment: Experiment) => experiment.measurement)
-  experiments: Experiment[];
+  @ManyToOne(() => Experiment, (experiment: Experiment) => experiment.measurements)
+  experiment: Experiment;
 
-  @RelationId((measurement: Measurement) => measurement.experiments) // you need to specify target relation
-  experimentsId: string[]
+  // @RelationId((measurement: Measurement) => measurement.experiments) // you need to specify target relation
+  // experimentsId: string[]
 
   // @OneToMany(() => Technique, (technique: Technique) => technique.measurement)
   // techniques: Technique[];

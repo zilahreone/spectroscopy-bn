@@ -18,11 +18,11 @@ export class Instrument {
   @ManyToOne(() => Technique, (technique:Technique) => technique.instruments)
   technique: Technique;
 
+  @OneToMany(() => Experiment, (experiment: Experiment) => experiment.instrument)
+  experiments: Experiment[];
+
   @ManyToOne(() => EquipmentType, (equipmentType:EquipmentType) => equipmentType.instruments)
   equipmentType: EquipmentType;
-
-  // @OneToMany(() => Experiment, (experiment: Experiment) => experiment.instrument)
-  // experiments: Experiment[];
 
   // @RelationId((instrument: Instrument) => instrument.experiments)
   // experimentsId: string[];

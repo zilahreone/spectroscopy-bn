@@ -1,7 +1,7 @@
 import { Download } from "src/spectroscopy/download/entities/download.entity";
 import { Experiment } from "src/spectroscopy/experiment/entities/experiment.entity";
 import { Organization } from "src/spectroscopy/organization/entities/organization.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, RelationId, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -9,19 +9,19 @@ export class User {
   id: string;
 
   @Column('boolean', { default: false })
-  is_active: boolean;
+  isActive: boolean;
 
-  @CreateDateColumn()
-  created_date: Date
+  @Column()
+  name: string;
 
-  @Column({ nullable: true })
-  preferred_username: string;
+  @Column()
+  preferredUsername: string;
 
-  @Column({ nullable: true })
-  given_name: string;
+  @Column()
+  givenName: string;
 
-  @Column({ nullable: true })
-  family_name: string;
+  @Column()
+  familyName: string;
 
   @Column({ nullable: true })
   email: string;
@@ -29,22 +29,28 @@ export class User {
   @Column('json')
   user: object;
 
+  @CreateDateColumn({ name: 'create_at' })
+  createAt: Date;
+
+  @UpdateDateColumn({ nullable: true, name: 'update_at' })
+  updateAt: Date;
+
   @OneToMany(() => Download, (download: Download) => download.user)
   downloads: Download[];
 
-  @RelationId((user: User) => user.downloads)
-  downloads_id: string[]
+  // @RelationId((user: User) => user.downloads)
+  // downloads_id: string[]
 
   @ManyToOne(() => Organization, (organization: Organization) => organization.users)
   organization: Organization;
 
-  @RelationId((user: User) => user.organization) // you need to specify target relation
-  organization_id: string
+  // @RelationId((user: User) => user.organization) // you need to specify target relation
+  // organization_id: string
 
   @OneToMany(() => Experiment, (experiment: Experiment) => experiment.user)
   experiments: Experiment[];
   
-  @RelationId((user: User) => user.experiments)
-  experiments_id: string[]
+  // @RelationId((user: User) => user.experiments)
+  // experiments_id: string[]
 
 }

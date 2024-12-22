@@ -6,8 +6,9 @@ import { Experiment } from './entities/experiment.entity';
 import { SampleModule } from '../sample/sample.module';
 import { OrganizationModule } from '../organization/organization.module';
 import { UserModule } from '../user/user.module';
-import { MeasurementModule } from '../measurement/measurement.module';
 import { TechniqueModule } from '../technique/technique.module';
+import { NestjsFormDataModule } from 'nestjs-form-data';
+import { EquipmentTypeModule } from '../equipment-type/equipment-type.module';
 import { InstrumentModule } from '../instrument/instrument.module';
 
 @Module({
@@ -15,12 +16,14 @@ import { InstrumentModule } from '../instrument/instrument.module';
   providers: [ExperimentService],
   imports: [
     TypeOrmModule.forFeature([Experiment]),
+    NestjsFormDataModule.config({}),
     SampleModule,
     OrganizationModule,
     UserModule,
-    MeasurementModule,
     TechniqueModule,
+    EquipmentTypeModule,
     InstrumentModule
-  ]
+  ],
+  exports: [ExperimentService]
 })
 export class ExperimentModule {}

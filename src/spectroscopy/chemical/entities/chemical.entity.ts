@@ -12,7 +12,7 @@ export class Chemical {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @OneToMany(() => Sample, (sample: Sample) => sample.chemical)

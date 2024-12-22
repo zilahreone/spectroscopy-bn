@@ -8,14 +8,17 @@ export class CreateUserDto {
   @IsOptional()
   isActive: boolean;
 
-  @IsOptional()
+  @IsNotEmpty()
+  name: string;
+  
+  @IsNotEmpty()
   preferredUsername: string;
 
-  @IsOptional()
-  givenname: string;
+  @IsNotEmpty()
+  givenName: string;
 
-  @IsOptional()
-  familyname: string;
+  @IsNotEmpty()
+  familyName: string;
 
   @IsEmail()
   @IsOptional()
@@ -26,6 +29,6 @@ export class CreateUserDto {
   user: object;
 
   @IsUUID(4)
-  @IsNotEmpty()
+  @IsOptional()
   organizationId: string;
 }

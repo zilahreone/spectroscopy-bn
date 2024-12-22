@@ -31,7 +31,15 @@ export class CategoryService {
 
   async findOne(id: { name: string } | { id: string}) {
     try {
-      return await this.repository.findOneByOrFail(id);
+      return await this.repository.findOneOrFail({ where: id, relations: {}});
+    } catch (error) {
+      throw new NotFoundException(`${error}`);
+    }
+  }
+  
+  async findOneRelation(id: { name: string } | { id: string}) {
+    try {
+      return (await this.repository.findOneOrFail({ where: id, relations: { samples: { experiments: true } } })).samples.map(sam => (sam.experiments.map(exp => ({ id: exp.id, name: exp.name }))));
     } catch (error) {
       throw new NotFoundException(`${error}`);
     }

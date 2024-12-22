@@ -11,7 +11,7 @@ export class UserController {
   ) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body() createUserDto: any) {
     return this.userService.create(createUserDto);
   }
 
@@ -25,10 +25,10 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  //   return this.userService.update(id, updateUserDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
