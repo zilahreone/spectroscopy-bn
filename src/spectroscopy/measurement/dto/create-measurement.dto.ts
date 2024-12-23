@@ -83,7 +83,7 @@ class RamanCondition extends MeasurementCondition {
 }
 
 
-class MeasurementTechniqueSERS {
+class RamanMeasurementTechniqueSERS {
   @IsOptional()
   chip: string;
 
@@ -97,11 +97,54 @@ class MeasurementTechniqueSERS {
   other: string;
 }
 
-class MeasurementTechnique {
+class RamanMeasurementTechnique {
+
   @ValidateNested()
-  @Type(() => MeasurementTechniqueSERS)
+  @Type(() => RamanMeasurementTechniqueSERS)
   @IsNotEmptyObject()
-  sers: MeasurementTechniqueSERS
+  sers: RamanMeasurementTechniqueSERS
+}
+
+class TDSSignal {
+
+  @IsNotEmpty()
+  binder: string;
+
+  @ValidateNested()
+  @Type(() => TDSCondition)
+  @IsNotEmptyObject()
+  measurementCondition: TDSCondition;
+}
+
+class FTIRSignal {
+
+  @ValidateNested()
+  @Type(() => FTIRCondition)
+  @IsNotEmptyObject()
+  measurementCondition: FTIRCondition;
+
+  @IsNotEmpty()
+  measurementTechnique: string;
+
+  @IsNotEmpty()
+  measurementRange: string;
+}
+
+class RamanSignal {
+
+  @ValidateNested()
+  @Type(() => RamanCondition)
+  @IsNotEmptyObject()
+  measurementCondition: RamanCondition;
+
+  @ValidateNested()
+  @Type(() => RamanMeasurementTechnique)
+  @IsNotEmptyObject()
+  measurementTechnique: RamanMeasurementTechnique;
+
+  @IsNotEmpty()
+  typeData: string;
+  
 }
 
 export class Data {
@@ -131,50 +174,25 @@ export class Data {
   @IsNotEmpty()
   techniqueName: string;
 
-  @IsNotEmpty()
-  @ValidateIf((measurement: Data) => measurement.techniqueName === 'tds')
-  binder: string;
-
+  
+  @ValidateNested()
   @Type((val) => {
     const { techniqueName } = val.newObject
-
     switch (techniqueName) {
       case 'raman':
-        return RamanCondition;
+        return RamanSignal;
       case 'ftir':
-        return FTIRCondition;
+        return;
       case 'tds':
-        return TDSCondition;
+        return;
       default:
         break;
     }
   })
-  @ValidateNested()
   @IsNotEmptyObject()
-  measurementCondition: RamanCondition | FTIRCondition | TDSCondition;
+  signal: RamanSignal | FTIRSignal | TDSSignal
 
   @ValidateNested()
-  @Type((val) => {
-    const { techniqueName } = val.newObject
-    switch (techniqueName) {
-      case 'raman':
-        return MeasurementTechnique
-      default:
-        break;
-    }
-  })
-  @IsNotEmpty()
-  @ValidateIf((measurement: Data) => ['ftir', 'raman'].includes(measurement.techniqueName))
-  measurementTechnique: string | MeasurementTechnique;
-
-  @IsNotEmpty()
-  @ValidateIf((measurement: Data) => measurement.techniqueName === 'ftir')
-  measurementRange: string;
-
-  @IsNotEmpty()
-  @ValidateIf((measurement: Data) => measurement.techniqueName === 'raman')
-  typeData: string;
-
   @Type(() => Files)
   @IsNotEmptyObject()
   attachment: Files

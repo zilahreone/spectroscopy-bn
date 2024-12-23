@@ -7,10 +7,6 @@ import { extname } from 'path';
 @Injectable()
 export class AppService {
 
-  getHello(): string {
-    return 'Hello World! naja eiei';
-  }
-
   checkUnicode(files: FileSystemStoredFile[]): FileSystemStoredFile[] {
     let attachments = files
     attachments.forEach(file => {
@@ -30,27 +26,46 @@ export class AppService {
     return newFileName
   }
 
-  deleteFile(file: { name: string, size: number, mimeType: string, fileExt: string }) {
+  getPath(dirName: 'images' | 'attachments' | 'measurements', fileName: string) {
     const imagesDir: string = process.env.IMAGES_DIR
     const attachmentsDir: string = process.env.ATTACHMENTS_DIR
-    let path = file.mimeType.includes('image') ? `${imagesDir}/${file.name}` : `${attachmentsDir}/${file.name}`
+    const measurementsDir: string = process.env.MEASUREMENTS_DIR
+    let path = null
+    switch (dirName) {
+      case 'images':
+        path = `${imagesDir}/${fileName}`
+        break;
+      case 'attachments':
+        path = `${attachmentsDir}/${fileName}`
+        break;
+      case 'measurements':
+        path = `${measurementsDir}/${fileName}`
+        break;
+      default:
+        break;
+    }
+    return path
+  }
+
+  deleteFile(dirName: 'images' | 'attachments' | 'measurements', fileName: string) {
+    // let path = file.mimeType.includes('image') ? `${imagesDir}/${file.name}` : `${attachmentsDir}/${file.name}`
+    let path = this.getPath(dirName, fileName)
     try {
       rmSync(path, { force: true })
-      file['deleted'] = true
+      // file['deleted'] = true
     } catch (error) {
       throw new NotImplementedException(`can not remove file path "${path}"`)
     }
   }
 
-  saveFile(file: FileSystemStoredFile) {
-    const imagesDir: string = process.env.IMAGES_DIR
-    const attachmentsDir: string = process.env.ATTACHMENTS_DIR
-    // const measurementsDir: string = process.env.MEASUREMENTS_DIR
+  saveFile(file: FileSystemStoredFile, dirName: 'images' | 'attachments' | 'measurements') {
     try {
       const newFileName = this.renameFile(file.originalName)
-      let path = file.mimeType.includes('image') ? `${imagesDir}/${newFileName}` : `${attachmentsDir}/${newFileName}`
-      writeFileSync(path, file['buffer'])
-      file.originalName = newFileName
+      let path = this.getPath(dirName, newFileName)
+      if (path) {
+        writeFileSync(path, file['buffer'])
+        file.originalName = newFileName
+      }
     } catch (error) {
       throw new NotImplementedException(`${error}`)
     }

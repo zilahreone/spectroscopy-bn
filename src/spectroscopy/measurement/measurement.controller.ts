@@ -32,23 +32,16 @@ export class MeasurementController {
   findOneFilename(@Param() params: { id: string, filename: string }) {
     const { id, filename } = params
     return this.measurementService.streamFile(isUUID(id) ? {id} : {name: id}, filename)
-    // return this.sampleService.findOne(isUUID(id) ? {id} : {name: id});
   }
 
   @Patch(':id')
   @FormDataRequest()
   update(@Param('id') id: string, @Body() updateMeasurementDto: UpdateMeasurementDto) {
-    // return this.measurementService.update(id, updateMeasurementDto);
+    return this.measurementService.update(isUUID(id) ? {id} : {name: id}, updateMeasurementDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.measurementService.remove(isUUID(id) ? {id} : {name: id});
   }
-
-  @Get(':id/file/:name')
-  getFile(@Param() params: { id: string, name: string }) {
-    const { id, name } = params
-    // return this.measurementService.findFile(id, name)
-  }  
 }

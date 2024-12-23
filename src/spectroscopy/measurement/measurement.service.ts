@@ -9,6 +9,7 @@ import { join } from 'path';
 import { ExperimentService } from '../experiment/experiment.service';
 import { AppService } from 'src/app.service';
 import { FileSystemStoredFile } from 'nestjs-form-data';
+import { Experiment } from '../experiment/entities/experiment.entity';
 
 @Injectable()
 export class MeasurementService {
@@ -18,38 +19,76 @@ export class MeasurementService {
     private readonly experimentService: ExperimentService,
     private readonly appService: AppService,
   ) { }
+
+  measurementObject(experiment: Experiment, measurementDto: CreateMeasurementDto | UpdateMeasurementDto) {
+    let measurement = {
+      name: measurementDto.data.name,
+      spectrumDescription: measurementDto.data.spectrumDescription,
+      remark: measurementDto.data.remark,
+      experiment: experiment,
+      attachment: measurementDto.data.attachment,
+      raman: null,
+    }
+    switch (measurementDto.data.techniqueName) {
+      case 'raman':
+        measurement = {
+          ...measurement,
+          raman: measurementDto.data.signal
+        }
+        break;
+      default:
+        break;
+    }
+    return measurement
+  }
+
   async create(createMeasurementDto: CreateMeasurementDto) {
     const experiment = await this.experimentService.findOne({ id: createMeasurementDto.data.experimentId })
     const attachment: FileSystemStoredFile = createMeasurementDto.attachment[0]
+    // console.log(createMeasurementDto.data);
     try {
-      this.appService.saveFile(attachment)
+      this.appService.saveFile(attachment, 'measurements')
       createMeasurementDto.data.attachment = {
         name: attachment.originalName, size: attachment.size, mimeType: attachment.mimeType, fileExt: attachment.extension
       }
-      // console.log(createMeasurementDto.data);
-      return await this.repository.save({ ...createMeasurementDto.data, experiment })
+      const measurement = this.measurementObject(experiment, createMeasurementDto)
+      return await this.repository.save(measurement)
     } catch (error) {
       throw new NotImplementedException(`${error}`)
     }
   }
 
   async findAll() {
-    return await this.repository.find({ relations: { experiment: {technique: true } } })
+    return await this.repository.find({ relations: { experiment: { technique: true } } })
   }
 
   async findOne(id: { name: string } | { id: string }): Promise<Measurement> {
     try {
-      return await this.repository.findOneOrFail({ where: id, relations: { experiment: { technique: true} } });
+      return await this.repository.findOneOrFail({ where: id, relations: { experiment: { technique: true, instrument: true } } });
     } catch (error) {
       throw new NotFoundException(`${error}`);
     }
   }
 
   async update(id: { name: string } | { id: string }, updateMeasurementDto: UpdateMeasurementDto) {
-    await this.findOne(id);
+    const find = await this.findOne(id);
     const experiment = await this.experimentService.findOne({ id: updateMeasurementDto.data.experimentId })
+    const attachment: FileSystemStoredFile = updateMeasurementDto.attachment[0]
+    // console.log(updateMeasurementDto.data.attachment);
+    // console.log(find.attachment);
+    // console.log(attachment);
+    
     try {
-      return await this.repository.update(id, { ...updateMeasurementDto.data, experiment });
+      if (find.attachment.name !== updateMeasurementDto.data.attachment.name && find.attachment.size !== updateMeasurementDto.data.attachment.size) {
+        this.appService.saveFile(attachment, 'measurements')
+        updateMeasurementDto.data.attachment = {
+          name: attachment.originalName, size: attachment.size, mimeType: attachment.mimeType, fileExt: attachment.extension
+        }
+        this.appService.deleteFile('measurements', find.attachment.name)
+      }
+      const measurement = this.measurementObject(experiment, updateMeasurementDto)
+      // console.log(measurement);
+      return await this.repository.update(id, measurement);
     } catch (error) {
       throw new NotImplementedException(`${error}`);
     }
@@ -64,25 +103,12 @@ export class MeasurementService {
     }
   }
 
-  findFile(id: { name: string } | { id: string }, name: string) {
-    const measurement: Promise<Measurement> = this.findOne(id)
-    const file = createReadStream(join(process.cwd(), `/uploads/${id}/measurements/${name}`));
-    return new StreamableFile(file, {
-      type: 'application/json',
-      // disposition: 'attachment; filename="package.json"',
-      // If you want to define the Content-Length value to another value instead of file's length:
-      // length: 123,
-    })
-  }
-
   async streamFile(id: { name: string } | { id: string }, filename: string) {
-    const imagesDir: string = process.env.IMAGES_DIR
-    const attachmentsDir: string = process.env.ATTACHMENTS_DIR
-
     const find = await this.findOne(id)
     // const filter = find.images.concat(find.attachments).filter(file => file.name === filename)[0]
     // console.log((filter));
-    const file = createReadStream(join(process.cwd(), `${find.attachment.mimeType.includes('image') ? imagesDir : attachmentsDir}/${filename}`));
+    const path = this.appService.getPath('measurements', filename)
+    const file = createReadStream(join(process.cwd(), path));
     return new StreamableFile(file, {
       type: find.attachment.mimeType,
       // disposition: 'attachment; filename="package.json"',

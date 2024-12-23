@@ -28,8 +28,6 @@ export class ExperimentController {
 
   @Get('category/:id')
   findCategory(@Param('id') id: string) {
-    console.log(id);
-    
     return this.experimentService.findCategory(id);
   }
 

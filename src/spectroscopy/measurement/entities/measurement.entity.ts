@@ -3,13 +3,18 @@ import { Experiment } from "src/spectroscopy/experiment/entities/experiment.enti
 import { Technique } from "src/spectroscopy/technique/entities/technique.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId, Unique, UpdateDateColumn } from "typeorm";
 
-class MeasurementCondition {
+class MeasurementConditionBase {
+
   @Column('integer')
   accumulations: number
+}
 
+class TDSMeasurementCondition extends MeasurementConditionBase {
   @Column({ nullable: true })
   waveLength: string
+}
 
+class FTIRMeasurementCondition extends MeasurementConditionBase {
   @Column({ nullable: true })
   source: string;
 
@@ -18,6 +23,12 @@ class MeasurementCondition {
 
   @Column({ nullable: true })
   detector: string;
+}
+
+class RAMANMeasurementCondition extends MeasurementConditionBase {
+
+  @Column({ nullable: true })
+  waveLength: string
 
   @Column({ nullable: true })
   laserPower: string
@@ -43,26 +54,57 @@ class MeasurementTechniqueSERS {
   other: string;
 }
 
-class MeasurementTechnique {
+class RAMANMeasurementTechnique {
   @Column(() => MeasurementTechniqueSERS)
   sers: MeasurementTechniqueSERS
 }
 
 class File {
   @Column()
-  name: string
+  name: string;
 
   // @Column()
   // path: string
 
   @Column('int')
-  size: number
+  size: number;
 
   @Column()
-  mimeType: string
+  mimeType: string;
 
   @Column()
-  fileExt: string
+  fileExt: string;
+}
+
+class RAMAN {
+  @Column(() => RAMANMeasurementCondition)
+  measurementCondition: RAMANMeasurementCondition;
+
+  @Column(() => RAMANMeasurementTechnique)
+  measurementTechnique: RAMANMeasurementTechnique;
+
+  @Column()
+  typeData: string;
+}
+
+class FTIR {
+  @Column(() => FTIRMeasurementCondition)
+  measurementCondition: FTIRMeasurementCondition;
+
+  @Column()
+  measurementTechnique: string;
+
+  @Column({ nullable: true })
+  measurementRange: string;
+}
+
+class TDS {
+  @Column(() => TDSMeasurementCondition)
+  measurementCondition: TDSMeasurementCondition;
+
+  @Column()
+  binder: string;
+
 }
 
 @Entity()
@@ -74,32 +116,44 @@ export class Measurement {
   @Column()
   name: string;
 
-  // @Column({ nullable: true })
-  // spectrumDescription: string
-
-  // @Column({ nullable: true })
-  // remark: string;
-
-  @Column(() => MeasurementCondition)
-  measurementCondition: MeasurementCondition;
-
-  @Column(() => MeasurementTechnique)
-  measurementTechnique: string | MeasurementTechnique;
+  @Column({ nullable: true })
+  spectrumDescription: string
 
   @Column({ nullable: true })
-  measurementRange: string;
+  remark: string;
 
-  @Column({ nullable: true })
-  typeData: string;
+  @Column('json', { nullable: true })
+  raman: RAMAN;
+
+  // @Column('json', { nullable: true, default: {} })
+  // raman: RAMAN;
+  
+  // @Column('json', { nullable: true, default: {} })
+  // ftir: FTIR;
+  
+  // @Column('json', { nullable: true })
+  // tds: TDS | null
+
+  // @Column(() => RAMANMeasurementCondition)
+  // measurementCondition: RAMANMeasurementCondition;
+
+  // @Column(() => RAMANMeasurementTechnique)
+  // measurementTechnique: string | RAMANMeasurementTechnique;
+
+  // @Column({ nullable: true })
+  // measurementRange: string;
+
+  // @Column({ nullable: true })
+  // typeData: string;
 
   @Column(() => File)
   attachment: File
 
-  // @CreateDateColumn({ name: 'create_at' })
-  // createAt: Date;
+  @CreateDateColumn({ name: 'create_at' })
+  createAt: Date;
 
-  // @UpdateDateColumn({ nullable: true, name: 'update_at' })
-  // updateAt: Date;
+  @UpdateDateColumn({ nullable: true, name: 'update_at' })
+  updateAt: Date;
 
   @OneToMany(() => Download, (download: Download) => download.measurement)
   downloads: Download[];
