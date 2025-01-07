@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { ChemicalModule } from '../chemical/chemical.module';
 import { TechniqueModule } from '../technique/technique.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [CategoryController],
@@ -13,6 +14,7 @@ import { TechniqueModule } from '../technique/technique.module';
     TypeOrmModule.forFeature([Category]),
     // ChemicalModule,
     // TechniqueModule
+    AuthModule
   ],
   exports: [
     CategoryService

@@ -1,11 +1,12 @@
 import { IsDefined, IsNotEmpty, IsOptional, IsUUID } from "class-validator";
 
 export class CreateDownloadDto {
+  @IsUUID(4)
   @IsNotEmpty()
-  measurementId: string;
+  experimentId: string;
   
+  @IsUUID(4)
   @IsNotEmpty()
-  @IsOptional()
   userId: string;
 }
 

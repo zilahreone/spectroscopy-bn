@@ -3,8 +3,8 @@ import { DownloadService } from './download.service';
 import { DownloadController } from './download.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Download } from './entities/download.entity';
-import { MeasurementModule } from '../measurement/measurement.module';
 import { UserModule } from '../user/user.module';
+import { ExperimentModule } from '../experiment/experiment.module';
 
 @Module({
   controllers: [DownloadController],
@@ -12,7 +12,7 @@ import { UserModule } from '../user/user.module';
   imports: [
     TypeOrmModule.forFeature([Download]),
     UserModule,
-    MeasurementModule,
+    ExperimentModule
   ],
   exports: [
     DownloadService

@@ -3,12 +3,14 @@ import { OrganizationService } from './organization.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
 import { isUUID } from 'class-validator';
+import { Roles } from 'src/auth/roles.decorator';
 
 @Controller('organization')
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
   @Post()
+  @Roles(['admin'])
   create(@Body() createOrganizationDto: CreateOrganizationDto) {
     return this.organizationService.create(createOrganizationDto);
   }
@@ -24,11 +26,13 @@ export class OrganizationController {
   }
 
   @Patch(':id')
+  @Roles(['admin'])
   update(@Param('id') id: string, @Body() updateOrganizationDto: UpdateOrganizationDto) {
     return this.organizationService.update(id, updateOrganizationDto);
   }
 
   @Delete(':id')
+  @Roles(['admin'])
   remove(@Param('id') id: string) {
     return this.organizationService.remove(id);
   }

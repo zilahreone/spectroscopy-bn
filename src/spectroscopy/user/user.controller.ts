@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthService } from 'src/auth/auth.service';
+import { Roles } from 'src/auth/roles.decorator';
 
 @Controller('user')
 export class UserController {
@@ -31,6 +32,7 @@ export class UserController {
   // }
 
   @Delete(':id')
+  @Roles(['admin'])
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
   }

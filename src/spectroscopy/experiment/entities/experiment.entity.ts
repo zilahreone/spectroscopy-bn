@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsUUID } from "class-validator";
+import { Download } from "src/spectroscopy/download/entities/download.entity";
 import { EquipmentType } from "src/spectroscopy/equipment-type/entities/equipment-type.entity";
 import { Instrument } from "src/spectroscopy/instrument/entities/instrument.entity";
 import { Measurement } from "src/spectroscopy/measurement/entities/measurement.entity";
@@ -52,6 +53,9 @@ export class Experiment {
   
   // @RelationId((experiment: Experiment) => experiment.measurement) // you need to specify target relation
   // measurementId: string
+
+  @OneToMany(() => Download, (download: Download) => download.experiment)
+  downloads: Download[];
   
   @ManyToOne(() => Instrument, (instrument: Instrument) => instrument.experiments)
   instrument: Instrument;

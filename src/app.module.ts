@@ -23,20 +23,25 @@ import { ChemicalModule } from './spectroscopy/chemical/chemical.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { InstrumentModule } from './spectroscopy/instrument/instrument.module';
 import { EquipmentTypeModule } from './spectroscopy/equipment-type/equipment-type.module';
+import { RolesGuard } from './auth/roles.guard';
 // import { FormModule } from './spectroscopy/form/form.module';
 
 @Module({
   controllers: [AppController],
   providers: [
     AppService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
-    // {
-    //   provide: APP_FILTER,
-    //   useClass: HttpExceptionFilter,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
   ],
   imports: [
     ConfigModule.forRoot({
@@ -44,7 +49,7 @@ import { EquipmentTypeModule } from './spectroscopy/equipment-type/equipment-typ
       envFilePath: '.env',
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
-    // AuthModule,
+    AuthModule,
     ChemicalModule,
     CategoryModule,
     OrganizationModule,

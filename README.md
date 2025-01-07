@@ -71,3 +71,15 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Database Migrations
+```bash
+$ yarn migration:generate -- db/migrations/[comment]
+$ yarn migration:run
+```
+
+## Docker
+```bash
+$ sudo docker build -t hub.meca.in.th/meca/spectroscopy:dev .
+$ sudo docker push hub.meca.in.th/meca/spectroscopy:dev
+```

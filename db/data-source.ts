@@ -2,8 +2,9 @@ import { DataSource, DataSourceOptions } from "typeorm";
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'sqlite',
-  database: 'spectroscopy.sqlite',
+  database: 'data/spectroscopy.sqlite',
   entities: ['dist/**/*.entity.js'],
+  // migrations: ['dist/db/test/*.js'],
   migrations: ['dist/db/migrations/*.js'],
   synchronize: false
 };

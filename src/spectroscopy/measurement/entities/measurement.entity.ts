@@ -134,18 +134,6 @@ export class Measurement {
   // @Column('json', { nullable: true })
   // tds: TDS | null
 
-  // @Column(() => RAMANMeasurementCondition)
-  // measurementCondition: RAMANMeasurementCondition;
-
-  // @Column(() => RAMANMeasurementTechnique)
-  // measurementTechnique: string | RAMANMeasurementTechnique;
-
-  // @Column({ nullable: true })
-  // measurementRange: string;
-
-  // @Column({ nullable: true })
-  // typeData: string;
-
   @Column(() => File)
   attachment: File
 
@@ -155,8 +143,8 @@ export class Measurement {
   @UpdateDateColumn({ nullable: true, name: 'update_at' })
   updateAt: Date;
 
-  @OneToMany(() => Download, (download: Download) => download.measurement)
-  downloads: Download[];
+  // @OneToMany(() => Download, (download: Download) => download.measurement)
+  // downloads: Download[];
 
   // @RelationId((measurement: Measurement) => measurement.downloads) // you need to specify target relation
   // downloadsId: string[]

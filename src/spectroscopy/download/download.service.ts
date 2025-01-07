@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { Injectable, NotFoundException, NotImplementedException, StreamableFile } from '@nestjs/common';
 import { CreateDownloadDto } from './dto/create-download.dto';
 import { UpdateDownloadDto } from './dto/update-download.dto';
 import { Download } from './entities/download.entity';
@@ -6,28 +6,35 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MeasurementService } from '../measurement/measurement.service';
 import { UserService } from '../user/user.service';
+import { ExperimentService } from '../experiment/experiment.service';
+import { createReadStream, createWriteStream } from 'fs';
+import { join } from 'path';
+import * as archiver from 'archiver';
+import * as temp from 'temp'
+import { Experiment } from '../experiment/entities/experiment.entity';
 
 @Injectable()
 export class DownloadService {
   constructor(
     @InjectRepository(Download)
     private readonly repository: Repository<Download>,
-    private readonly measurementService: MeasurementService,
+    private readonly experimentService: ExperimentService,
     private readonly userService: UserService,
   ) { }
   async create(createDownloadDto: CreateDownloadDto) {
-    const getMeasurement = await this.measurementService.findOne({id: createDownloadDto.measurementId});
-    const getUser = await this.userService.findOne(createDownloadDto.userId);
-    return await this.repository.save({ ...createDownloadDto, measurement: getMeasurement, user: getUser })
+    const experiment = await this.experimentService.findOne({ id: createDownloadDto.experimentId });
+    const user = await this.userService.findOne(createDownloadDto.userId);
+
+    return await this.repository.save({...createDownloadDto, experiment, user})
   }
 
   async findAll() {
-    return await this.repository.find({ relations: { measurement: true, user: true } });
+    return await this.repository.find();
   }
 
   async findOne(id: string) {
     try {
-      return await this.repository.findOneByOrFail({ id });
+      return await this.repository.findOneOrFail({ where: { id }, relations: { experiment: true, user: true } });
     } catch (error) {
       throw new NotFoundException(`${error}`);
     }
@@ -49,5 +56,37 @@ export class DownloadService {
     } catch (error) {
       throw new NotImplementedException(`${error}`);
     }
+  }
+
+  async findExperiment(experimentId: string) {
+    const experiment = await this.experimentService.findOne({ id: experimentId });
+    return this.streamZip(experiment)
+  }
+
+  streamZip(experiment: Experiment): StreamableFile {
+    // const experiment = await this.experimentService.findOne({ id: experimentId });
+    const files = experiment.measurements.map(measurement => ({
+      name: `${experiment.technique.name.toUpperCase()}-${JSON.stringify(measurement[experiment.technique.name])?.replaceAll(/\"/g, '').replaceAll(/\:/g, '=')}.${measurement.attachment.fileExt}`,
+      originalName: measurement.attachment.name
+    }))
+    temp.track();
+    const stream = temp.createWriteStream();
+    // const stream = createWriteStream(join(process.cwd(), 'test.zip'))
+    // console.log(stream.path);
+    const archive = archiver('zip', {
+      zlib: { level: 0 } // Sets the compression level.
+    });
+    archive.pipe(stream);
+    // stream.end();
+    files.forEach(({ name, originalName }) => {
+      const fileRead = createReadStream(join(process.cwd(), `/uploads/measurements/${originalName}`)) || null
+      archive.append(fileRead, { name })
+    })
+    archive.finalize();
+    const zip = createReadStream(stream.path);
+    return new StreamableFile(zip, {
+      // type: 'application/json',
+      disposition: `attachment; filename="${experiment.name}.zip"`,
+    })
   }
 }

@@ -44,14 +44,14 @@ export class ExperimentService {
 
   async findOne(id: { name: string } | { id: string }) {
     try {
-      return await this.repository.findOneOrFail({ where: id, relations: { sample: { chemical: true, category: true }, organization: true, user: true, measurements: true, technique: true, equipmentType: true, instrument: true } });
+      return await this.repository.findOneOrFail({ where: id, relations: { sample: { chemical: true, category: true }, organization: true, user: true, measurements: true, technique: true, equipmentType: true, instrument: true, downloads: true } });
     } catch (error) {
       throw new NotFoundException(`${error}`);
     }
   }
   
   async findCategory(name: string) {
-    return (await this.repository.find({ relations: { sample: { category: true }, measurements: false } })).filter(exp => (exp.sample.category.name === name));
+    return (await this.repository.find({ relations: { sample: { category: true, form: true }, organization: true, measurements: false, technique: true, equipmentType: true } })).filter(exp => (exp.sample.category.name === name));
   }
 
   async update(id: { name: string } | { id: string }, updateExperimentDto: UpdateExperimentDto) {
