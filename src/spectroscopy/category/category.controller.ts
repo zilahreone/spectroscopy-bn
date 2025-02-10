@@ -28,10 +28,10 @@ export class CategoryController {
     return this.categoryService.findAllRelations();
   }
 
-  @Get('file-example')
-  getFile() {
-    return  this.categoryService.streamFile()
-  }
+  // @Get('file-example')
+  // getFile() {
+  //   return  this.categoryService.streamFile()
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

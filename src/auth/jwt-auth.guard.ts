@@ -5,11 +5,20 @@ import { AuthGuard } from "@nestjs/passport";
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    
     const request = context.switchToHttp().getRequest();
+    // const user = request.user;
+    // console.log(user);
+    // console.log((request.originalUrl));
+    const slashCount = (request.originalUrl.match(/\//g) || []).length;
+    // console.log(`Number of slashes in URL: ${slashCount}`);
+    
     if (request.method === 'GET') {
       return true;
     }
+    
     const result = await super.canActivate(context);
+    console.log(result);
     return result as boolean;
   }
   // constructor(private reflector: Reflector) {

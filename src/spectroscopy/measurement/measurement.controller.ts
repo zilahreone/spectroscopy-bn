@@ -6,6 +6,7 @@ import { FormDataRequest } from 'nestjs-form-data';
 import { isUUID } from 'class-validator';
 import { LoggingInterceptor } from './logging.interceptor';
 import { ParamDecodePipe } from './param-decode.pipe';
+import { Roles } from 'src/auth/roles.decorator';
 
 // @UseInterceptors(LoggingInterceptor)
 @Controller('measurement')
